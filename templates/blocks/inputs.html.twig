@@ -1,0 +1,126 @@
+{% set colunas = 0 %}
+<div class="row">
+{% for input in inputs %}
+    {% set colunas = colunas + input.class|getCols %}
+    {% if colunas > 12 %}
+        </div> <!-- fecha a que ja esta aberta e abre uma nova-->
+        <div class="row">
+        {% set colunas = 0 %}
+    {% endif %}
+
+    {% if input.type is not defined %}
+        {% set input = input|merge({'type': 'text'}) %}
+    {% endif %}
+
+    {% if input.opt is not defined %}
+        {% set input = input|merge({'opt': ''}) %}
+    {% endif %}
+
+    {% if input.alias is not defined %}
+        {% set label = input.name %}
+    {% else %}
+        {% set label = input.alias %}
+    {% endif %}
+
+    {% set input = input|merge({'name': input.name|unsanitize|lower}) %}
+
+    {% if input.type == 'select' %}
+        <div class="box-select {{ input.class }}" xmlns="http://www.w3.org/1999/html">
+            <div class="form-group label-static">
+                <label class="control-label">{{ label }}</label>
+                <div class="btn-group">
+                    <i class="material-icons">keyboard_arrow_down</i>
+                    <input type="hidden" class="valor_real" name="{{ input.name }}" value="">
+                    <input type="button" value="Selecione uma opção" class="form-control btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a value="">&nbsp;</a></li>
+                        {% for k, value in input.values %}
+                            <li><a value="{{ k }}">{{ value}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% dump(input) %}
+            {% if input.default is defined %}
+                <script>
+                    $(document).ready(function(){
+                        $('.dropdown-menu a[value="{{ input.default }}"]').click();
+                    });
+                </script>
+            {% endif %}
+        </div>
+    {% elseif input.type == 'textarea' %}
+        <div class="{{ input.class }}">
+            <div class="form-group">
+                <div class="form-group label-floating">
+                    <label class="control-label">{{ label }}</label>
+                    <textarea name="{{ input.name }}" class="form-control" rows="5"></textarea>
+                    <span class="material-input"></span>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="{{ input.class }}">
+            <div class="form-group label-floating">
+                <label class="control-label">{{ label }}</label>
+                <input name="{{ input.name }}" type="{{ input.type }}" value="{{ input.default }}" class="form-control" {{ input.opt }}>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+</div>
+<!--
+    $args = array(
+        'class' => 'col-md-4 col-sm-4',         //classes da div
+        'name'  => 'Nome',                      //nome do imput e texto da label
+        'type'  => 'text',                      //tipo do input, se array sera select
+        'values'=> []                           // valores caso o tipo seja select, checkbox ou radio
+        'opt'   => 'disabled',                  //opcionais do input, uma string que sera printada
+        'alias' => 'Primeiro nome'              //alias que apararecera na label sobrescrevendo o name
+    );
+ -->
+<style>
+    .box-select .is-focused i{
+        transform: rotate(180deg);
+        transition: all 300ms ease-in-out;
+    }
+    .box-select i{
+        right: 0;
+        top: 6px;
+        color: #aaa;
+        position: absolute;
+        transition: all 300ms ease-in-out;
+    }
+    .box-select input::placeholder {
+        color: red;
+    }
+    .box-select input{
+        /*border-radius: 3px !important;
+        will-change: box-shadow, transform;
+        transition: box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1), background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;*/
+        color: #555 !important;
+        background-color: transparent;
+        text-transform: none;
+    }
+    .box-select input:hover, .box-select input:active, .box-select input:focus{
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
+
+    .box-select .btn-group, .box-select .dropdown-menu{
+        width: 100%;
+    }
+    .box-select .btn-group{
+        margin: 0;
+    }
+</style>
+<script>
+    // função que atualiza os selects
+    $('.dropdown-menu a').on('click', function(){
+        var valor = $(this).attr("value");
+        var texto = $(this).text();
+
+        $(this).closest('.btn-group').find('.dropdown-toggle').val(texto);
+        $(this).closest('.btn-group').find('.valor_real').val(valor);
+    })
+</script>

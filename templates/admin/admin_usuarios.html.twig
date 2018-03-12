@@ -1,0 +1,45 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block body %}
+    {% form_theme form 'material_layout.html.twig' %}
+    <div class="gerar_rows">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+    </div>
+    <div class="card">
+        <div class="card-header" data-background-color="purple">
+            <div class="pull-left">
+                <h4 class="title">Usuários</h4>
+            </div>
+            <div class="nav-tabs-navigation">
+                <div class="clearfix nav-tabs-wrapper">
+                    <ul class="nav nav-tabs navbar-right" data-tabs="tabs">
+                        <li class="active">
+                            <a href="#profile" data-toggle="tab">
+                                <i class="material-icons">bug_report</i> Bugs
+                                <div class="ripple-container"></div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#messages" data-toggle="tab">
+                                <i class="material-icons">code</i> Website
+                                <div class="ripple-container"></div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="btn btn-white btn-round btn-just-icon retornar" href="{{ path('app_usuarioshow_single',{id:'novo'}) }}">
+                                <i class="material-icons">add</i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            {% set tabela = [] %}
+            {% set tabela = tabela|merge({"conteudo" : usuarios, "path" : "app_usuarioshow_single"}) %}
+            {% include 'blocks/tabela.html.twig' %}
+        </div>
+    </div>
+{% endblock %}

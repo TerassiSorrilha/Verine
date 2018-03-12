@@ -1,0 +1,184 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section id="bricks">
+
+        <div class="row masonry">
+
+            <!-- brick-wrapper -->
+            <div class="bricks-wrapper">
+                <div class="grid-sizer"></div>
+                <div class="brick entry featured-grid animate-this">
+                    <div class="entry-content">
+                        <div id="featured-post-slider" class="flexslider">
+                            <ul class="slides">
+                                <li>
+                                    <div class="featured-post-slide">
+                                        <div class="post-background" style="background-image:url('images/thumbs/featured/featured-1.jpg');"></div>
+                                        <div class="overlay"></div>
+                                        <div class="post-content">
+                                            <ul class="entry-meta">
+                                                <li>September 06, 2016</li>
+                                                <li><a href="#" >Naruto Uzumaki</a></li>
+                                            </ul>
+
+                                            <h1 class="slide-title"><a href="single-standard.html" title="">Minimalism Never Goes Out of Style</a></h1>
+                                        </div>
+                                    </div>
+                                </li> <!-- /slide -->
+                                <li>
+                                    <div class="featured-post-slide">
+                                        <div class="post-background" style="background-image:url('images/thumbs/featured/featured-2.jpg');"></div>
+                                        <div class="overlay"></div>
+                                        <div class="post-content">
+                                            <ul class="entry-meta">
+                                                <li>August 29, 2016</li>
+                                                <li><a href="#">Sasuke Uchiha</a></li>
+                                            </ul>
+                                            <h1 class="slide-title"><a href="single-standard.html" title="">Enhancing Your Designs with Negative Space</a></h1>
+                                        </div>
+                                    </div>
+                                </li> <!-- /slide -->
+                                <li>
+                                    <div class="featured-post-slide">
+                                        <div class="post-background" style="background-image:url('images/thumbs/featured/featured-3.jpg');;"></div>
+                                        <div class="overlay"></div>
+                                        <div class="post-content">
+                                            <ul class="entry-meta">
+                                                <li>August 27, 2016</li>
+                                                <li><a href="#" class="author">Naruto Uzumaki</a></li>
+                                            </ul>
+                                            <h1 class="slide-title"><a href="single-standard.html" title="">Music Album Cover Designs for Inspiration</a></h1>
+                                        </div>
+
+                                    </div>
+                                </li> <!-- end slide -->
+
+                            </ul> <!-- end slides -->
+                        </div> <!-- end featured-post-slider -->
+                    </div> <!-- end entry content -->
+                </div>
+
+                {% for article in articles %}
+                    <article class="brick entry format-standard animate-this">
+                        <div class="entry-thumb">
+                            <a href="{{ path('article_show', {slug: article.link}) }}" class="thumb-link">
+                                <img src="{{ asset('images/thumbs/diagonal-building.jpg') }}" alt="building">
+                            </a>
+                        </div>
+                        <div class="entry-text">
+                            <div class="entry-header">
+                                <div class="entry-meta">
+                                    <span class="cat-links">
+                                        {% for cat in article.categories %}
+                                            <a href="{{ path('category_show', {slug:cat}) }}">{{ cat }}</a>
+                                        {% endfor %}
+                                    </span>
+                                </div>
+                                <h1 class="entry-title"> <a href="{{ path('article_show', {slug: article.link}) }}">{{ article.title }}</a></h1>
+                            </div>
+                            <div class="entry-excerpt">
+                                {{ article.text }}
+                            </div>
+                        </div>
+                    </article> <!-- end article -->
+                {% endfor %}
+            </div> <!-- end brick-wrapper -->
+        </div> <!-- end row -->
+
+        <div class="row">
+            <nav class="pagination">
+                <span class="page-numbers prev inactive">Prev</span>
+                <span class="page-numbers current">1</span>
+                <a href="#" class="page-numbers">2</a>
+                <a href="#" class="page-numbers">3</a>
+                <a href="#" class="page-numbers">4</a>
+                <a href="#" class="page-numbers">5</a>
+                <a href="#" class="page-numbers">6</a>
+                <a href="#" class="page-numbers">7</a>
+                <a href="#" class="page-numbers">8</a>
+                <a href="#" class="page-numbers">9</a>
+                <a href="#" class="page-numbers next">Next</a>
+            </nav>
+        </div>
+
+    </section> <!-- end bricks -->
+
+
+
+    <div class="container">
+        <div class="row">
+
+            <!-- Article List -->
+            <div class="col-sm-12 col-md-8">
+
+                <!-- H1 Article -->
+                <a class="main-article-link" href="#">
+                    <div class="main-article mb-5 pb-3">
+                        <img src="{{ asset('images/meteor-shower.jpg') }}" alt="meteor shower">
+                        <h1 class="text-center mt-2">Ursid Meteor Shower: <br>Healthier than a regular shower?</h1>
+                    </div>
+                </a>
+
+                <!-- Supporting Articles -->
+
+                <div class="article-container my-1">
+                    <a href="{{ path('article_show', {slug: 'why-asteroids-taste-like-bacon'}) }}">
+                        <img class="article-img" src="{{ asset('images/asteroid.jpeg') }}">
+                        <div class="article-title d-inline-block pl-3 align-middle">
+                            <span>Why do Asteroids Taste Like Bacon?</span>
+                            <br>
+                            <span class="align-left article-details"><img class="article-author-img rounded-circle" src="{{ asset('images/alien-profile.png') }}"> Mike Ferengi </span>
+                            <span class="pl-5 article-details float-right"> 3 hours ago</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="article-container my-1">
+                    <a href="#">
+                        <img class="article-img"  src="{{ asset('images/mercury.jpeg') }}">
+                        <div class="article-title d-inline-block pl-3 align-middle">
+                            <span>Life on Planet Mercury: <br> Tan, Relaxing and Fabulous</span>
+                            <br>
+                            <span class="align-left article-details"><img class="article-author-img rounded-circle" src="{{ asset('images/astronaut-profile.png') }}"> Amy Oort </span>
+                            <span class="pl-5 article-details float-right"> 6 days ago</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="article-container my-1">
+                    <a href="#">
+                        <img class="article-img" src="{{ asset('images/lightspeed.png') }}">
+                        <div class="article-title d-inline-block pl-3 align-middle">
+                            <span>Light Speed Travel: <br> Fountain of Youth or Fallacy</span>
+                            <br>
+                            <span class="align-left article-details"><img class="article-author-img rounded-circle" src="{{ asset('images/astronaut-profile.png') }}"> Amy Oort </span>
+                            <span class="pl-5 article-details float-right"> 2 weeks ago</span>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Right bar ad space -->
+
+
+            <div class="col-sm-12 col-md-4 text-center">
+                <div class="ad-space mx-auto mt-1 pb-2 pt-2">
+                    <img class="advertisement-img" src="{{ asset('images/space-ice.png') }}">
+                    <p><span class="advertisement-text">New:</span> Space Ice Cream!</p>
+                    <button class="btn btn-info">Buy Now!</button>
+                </div>
+
+                <div class="quote-space pb-2 pt-2 px-5">
+                    <h3 class="text-center pb-3">Trending Quotes</h3>
+                    <p><i class="fa fa-comment"></i> "Our two greatest problems are gravity and paperwork. We can lick gravity, but sometimes the paperwork is overwhelming." <br>— <a href="https://en.wikipedia.org/wiki/Wernher_von_Braun">Wernher von Braun, Rocket Engineer</a></p>
+
+                    <p class="pt-4"><i class="fa fa-comment"></i> "Let's face it, space is a risky business. I always considered every launch a barely controlled explosion." <br>— <a href="https://en.wikipedia.org/wiki/Aaron_Cohen_(Deputy_NASA_administrator)">Aaron Cohen, NASA Administrator</a></p>
+
+                    <p class="pt-4"><i class="fa fa-comment"></i> "If offered a seat on a rocket ship, don't ask what seat. Just get on."<br>— <a href="https://en.wikipedia.org/wiki/Christa_McAuliffe">Christa McAuliffe, Challenger Astronaut</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
