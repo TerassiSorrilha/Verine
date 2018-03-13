@@ -2,6 +2,10 @@
     cursor: not-allowed;
 }
 
+.main-panel{
+    overflow-y: scroll !important;
+}
+
 .editavel.click:hover {
     cursor: pointer;
     background: #eee;
@@ -27,4 +31,8 @@
 
 .nav-tabs-wrapper {
     position: relative;
+}
+
+.no-margin {
+    margin: 0;
 }

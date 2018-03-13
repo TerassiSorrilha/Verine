@@ -41,7 +41,6 @@ class Relatorios
         if(empty($this->obj)){
             return "Sem dados para o relatorio";
         }
-
         $this->header = $this->getHeader();
         $this->data["itens"] = $this->getRelatorio();
         $this->data["header"] = $this->header;

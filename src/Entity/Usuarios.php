@@ -57,11 +57,11 @@ class Usuarios
 
     public function relatorio(){
         $array = [
-            "Id" => $this->getId(),
-            "Nome" => $this->getName(),
-            "Nível" => $this->getNivel()->getName(),
-            "E-mail" => $this->getEmail(),
-            "Login" => $this->getLogin()
+            "Id" => (!empty($this->id)) ? $this->getId(): "",
+            "Nome" => (!empty($this->name)) ? $this->getName(): "",
+            "Nível" => (!empty($this->nivel)) ? $this->getNivel()->getName(): "",
+            "E-mail" => (!empty($this->email)) ? $this->getEmail(): "",
+            "Login" => (!empty($this->login)) ? $this->getLogin(): ""
         ];
 
         // gera nomes

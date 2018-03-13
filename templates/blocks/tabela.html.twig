@@ -6,6 +6,9 @@
         {% endfor %}
         </thead>
         <tbody>
+        {% if tabela.conteudo.itens is empty %}
+            <tr><td>Sem dados</td></tr>
+        {% endif %}
         {% for row in tabela.conteudo.itens %}
             {% if tabela.path is defined %}
                 <tr class="editavel click" onclick="window.location.href = '{{ path(tabela.path, {'id' : row.Id}) }}'">
