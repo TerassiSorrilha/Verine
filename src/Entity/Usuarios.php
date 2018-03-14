@@ -25,9 +25,9 @@ class Usuarios
     private $nivel;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Article", mappedBy="author")
+     * @ORM\OneToMany(targetEntity="App\Entity\Usuarios", mappedBy="autor")
      */
-    protected $articles;
+    protected $posts;
 
     /**
      * @ORM\Column(type="string")
@@ -52,7 +52,7 @@ class Usuarios
     // =================================================================================================================
     public function __construct()
     {
-        $this->articles = new ArrayCollection();    // precisa ser arraycollection
+        $this->posts = new ArrayCollection();    // precisa ser arraycollection
     }
 
     public function relatorio(){

@@ -1,21 +1,23 @@
 {% extends 'admin/admin_base.html.twig' %}
-
 {% block body %}
-    {% form_theme form 'material_layout.html.twig' %}
-    <div class="card">
-        <div class="card-header" data-background-color="purple">
-            <h4 class="title">Usuários</h4>
+    {% if form is defined %}
+        {% form_theme form 'material_layout.html.twig' %}
+        <div class="card">
+            <div class="card-header" data-background-color="purple">
+                <h4 class="title">Pesquisar</h4>
+            </div>
+            <div class="card-content">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+            </div>
         </div>
-        <div class="card-content">
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            {{ form_end(form) }}
-        </div>
-    </div>
+    {% endif %}
     <div class="card">
         <div class="card-header" data-background-color="purple">
             <div class="pull-left">
-                <h4 class="title">Usuários</h4>
+                <h4 class="title">{{ title|capitalize }}</h4>
+                <p class="category">Edite ou adicione novos {{ title|lower }}</p>
             </div>
             <div class="nav-tabs-navigation">
                 <div class="clearfix nav-tabs-wrapper">
@@ -33,7 +35,7 @@
                             </a>
                         </li>
                         <li>
-                            <a class="btn btn-white btn-round btn-just-icon retornar" href="{{ path('app_usuariosedita',{id:'novo'}) }}">
+                            <a class="btn btn-white btn-round btn-just-icon retornar" href="{{ path( edit ,{id:'novo'}) }}">
                                 <i class="material-icons">add</i>
                             </a>
                         </li>
@@ -41,9 +43,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12">
+        <div class="card-content">
             {% set tabela = [] %}
-            {% set tabela = tabela|merge({"conteudo" : usuarios, "path" : "app_usuariosedita"}) %}
+            {% set tabela = tabela|merge({"conteudo" : itens, "path" : edit}) %}
             {% include 'blocks/tabela.html.twig' %}
         </div>
     </div>

@@ -1,0 +1,45 @@
+{% extends 'admin/admin_base.html.twig' %}
+{% form_theme form 'material_layout.html.twig' %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header" data-background-color="purple">
+            <div class="pull-left">
+                {% if form.id is not defined %}
+                    <h4 class="title">Novo {{ title }}</h4>
+                {% else %}
+                    <h4 class="title">Edição</h4>
+                    <p class="category">Complete o cadastro deste {{ title }}</p>
+                {% endif %}
+            </div>
+            <div class="nav-tabs-navigation">
+                <div class="clearfix nav-tabs-wrapper">
+                    <ul class="nav nav-tabs navbar-right" data-tabs="tabs">
+                        <li class="active">
+                            <a href="#profile" data-toggle="tab">
+                                <i class="material-icons">bug_report</i> Bugs
+                                <div class="ripple-container"></div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#messages" data-toggle="tab">
+                                <i class="material-icons">code</i> Website
+                                <div class="ripple-container"></div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="btn btn-white btn-round btn-just-icon retornar" href="{{ path(retorno) }}">
+                                <i class="material-icons">keyboard_arrow_left</i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card-content">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

@@ -1,29 +1,30 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Administrador
+ * Date: 14/03/2018
+ * Time: 08:08
+ */
 
 namespace App\Controller;
 
+use App\Controller\Forms\UsuariosForms;
 use App\Entity\Niveis;
 use App\Entity\Usuarios;
 use App\Services\Relatorios;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+
 
 class UsuariosController extends Controller
 {
-    private $form;
+    //private $form;
     private $filter;
 
     public function filter(Request $request){
@@ -31,11 +32,34 @@ class UsuariosController extends Controller
             ->add("sc_id", IntegerType::class,[
                 'required' => false,
                 'label' => "Id",
-                'attr' => ['pai' => 'col-md-4']
+                'attr' => ['pai' => 'col-md-3']
             ])
             ->add("sc_name", TextType::class, [
                 'required' => false,
                 'label' => "Nome",
+                'attr' => [
+                    'pai' => 'col-md-6',
+                ]
+            ])
+            ->add("sc_nivel", EntityType::class, [
+                'label' => "Nível",
+                'class' => Niveis::class,
+                'required' => false,
+                'choice_label' => 'name',
+                'attr' => [
+                    'pai' => 'col-md-3'
+                ]
+            ])
+            ->add("sc_login", TextType::class, [
+                'required' => false,
+                'label' => "Login",
+                'attr' => [
+                    'pai' => 'col-md-4',
+                ]
+            ])
+            ->add("sc_email", EmailType::class, [
+                'required' => false,
+                'label' => "E-mail",
                 'attr' => [
                     'pai' => 'col-md-4',
                 ]
@@ -60,15 +84,23 @@ class UsuariosController extends Controller
             if(isset($data["sc_id"])){
                 $this->filter["id"] = $data["sc_id"];
             }
-
             if(isset($data["sc_name"])){
                 $this->filter["name"] = $data["sc_name"];
+            }
+            if(isset($data["sc_nivel"])){
+                $this->filter["nivel"] = $data["sc_nivel"];
+            }
+            if(isset($data["sc_login"])){
+                $this->filter["login"] = $data["sc_login"];
+            }
+            if(isset($data["sc_email"])){
+                $this->filter["email"] = $data["sc_email"];
             }
         }
     }
 
     /**
-     * @Route("/admin/usuarios/", name="app_usuarioshow")
+     * @Route("/admin/usuarios/", name="admin_usuarios")
      */
     public function show(Request $request)
     {
@@ -107,14 +139,16 @@ class UsuariosController extends Controller
         }
 
         // passa dados recuperados para a view
-        return $this->render('admin/admin_usuarios.html.twig', [
-            'usuarios' => $relatorio,
-            'form'  => $this->form->createView()
+        return $this->render('admin/admin_cadastro_padrao.html.twig', [
+            'itens' => $relatorio,
+            'form'  => $this->form->createView(),
+            'title' => 'Usuarios',
+            'edit' => 'admin_usuarios_single',
         ]);
     }
 
     /**
-     * @Route("/admin/usuario/edita/{id}", name="app_usuariosedita", defaults={"id": "null"})
+     * @Route("/admin/usuario/{id}", name="admin_usuarios_single", defaults={"id": "null"})
      */
     public function edita(Request $request, $id){
         // 1) build the form
@@ -141,18 +175,20 @@ class UsuariosController extends Controller
             // actually executes the queries (i.e. the INSERT query)
             $em->flush();
 
-            return$this->redirectToRoute('app_usuariosedita', ['id' => $usuario->getId()]);
+            return $this->redirectToRoute('admin_usuarios_single', ['id' => $usuario->getId()]);
         }
 
-        return $this->render( 'admin/admin_usuarios_edita.html.twig', [
-               'form' => $form->createView()
+        return $this->render( 'admin/admin_edit_padrao.html.twig', [
+               'form' => $form->createView(),
+                'title' => 'Usuario',
+                'retorno' => 'admin_usuarios'
             ]
         );
     }
 
     /**
      * @Route("/admin/usuarios/{id}", name="app_usuarioshow_single", defaults={"id": "null"},)
-     */
+
     public function showSingle($id){
 
         // puxa os dados filtrando pela id
@@ -222,7 +258,7 @@ class UsuariosController extends Controller
 
     /**
      * @Route("form/admin/usuarios/", name="salva_usuario", methods={"POST"})
-     */
+
     public function Salva()
     {
         $em = $this->getDoctrine()->getManager();
@@ -249,74 +285,5 @@ class UsuariosController extends Controller
         return$this->redirectToRoute('app_usuarioshow_single', ['id' => $usuario->getId()]);
         //return $this->render('admin/admin_usuarios_single.html.twig');
     }
-}
-
-class UsuariosForms extends AbstractType{
-
-    // aqui vai so o formulario de cadastro
-    public function buildForm(FormBuilderInterface $builder, array $options){
-        $builder
-            ->add("id", IntegerType::class,[
-                'required' => false,
-                'label' => "Id",
-                'attr' => [
-                    'readonly' => "readonly",
-                    'pai' => 'col-md-2'
-                ]
-            ])
-            ->add("name", TextType::class, [
-                'label' => "Nome",
-                'attr' => [
-                    'pai' => 'col-md-6',
-                ]
-            ])
-            ->add('login', TextType::class, [
-                'attr' => [
-                    'pai' => 'col-md-4',
-                ]
-            ])
-            ->add('nivel', EntityType::class,[
-                'class' => Niveis::class,
-                'choice_label' => 'name',
-                'attr' => [
-                    'pai' => 'col-md-4',
-                ]
-            ])
-            ->add('email', EmailType::class,[
-                'label' => 'E-mail',
-                'attr' => [
-                    'pai' => 'col-md-4',
-                ]
-            ])
-            ->add('password', RepeatedType::class, array(
-                'type' => PasswordType::class,
-                'first_options'  => [
-                    'label' => 'Password',
-                    'attr' => [
-                        'pai' => 'col-md-2',
-                    ]
-                ],
-                'second_options' => [
-                    'label' => 'Repeat Password',
-                    'attr' => [
-                        'pai' => 'col-md-2',
-                    ],
-                ]
-            ))
-            ->add("send", SubmitType::class,[
-                'label' => 'Salvar',
-                'attr' => [
-                    'class' => 'btn-primary pull-right',
-                    'pai' => 'col-md-12 no-margin'
-                ]
-            ]);
-    }
-
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults(array(
-            'data_class' => Usuarios::class,
-        ));
-    }
-
+    */
 }

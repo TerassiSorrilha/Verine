@@ -28,22 +28,19 @@ class Niveis
     protected $usuarios;
 
     //==================================================================================================================
-    public function headers(){
-        $array = get_object_vars($this);
-
-        // verifica se é um array collection
-        foreach ($array as $k => $v){
-            if (is_object($v)) {
-                $array[$k] = $v->count();
-            }
-        }
-
-        return $array;
-    }
-
     public function __construct()
     {
         $this->usuarios = new ArrayCollection();    // precisa ser arraycollection
+    }
+
+    public function relatorio(){
+        $array = [
+            "Id" => (!empty($this->id)) ? $this->getId(): "",
+            "Nome" => (!empty($this->name)) ? $this->getName(): "",
+        ];
+
+        // gera nomes
+        return $array;
     }
 
     /**
