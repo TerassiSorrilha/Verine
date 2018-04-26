@@ -20,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
 class UsuariosController extends Controller
@@ -150,7 +151,7 @@ class UsuariosController extends Controller
     /**
      * @Route("/admin/usuario/{id}", name="admin_usuarios_single", defaults={"id": "null"})
      */
-    public function edita(Request $request, $id){
+    public function edita(UserPasswordEncoderInterface $encoder, Request $request, $id){
         // 1) build the form
         $usuario = $this->getDoctrine()
             ->getRepository(Usuarios::class)
@@ -165,6 +166,10 @@ class UsuariosController extends Controller
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // faz o encode da senha
+            $encoded = $encoder->encodePassword($usuario, $form["password"]->getData());
+            $usuario->setPassword($encoded);
 
             // 4) save the User!
             $em = $this->getDoctrine()->getManager();
@@ -185,105 +190,4 @@ class UsuariosController extends Controller
             ]
         );
     }
-
-    /**
-     * @Route("/admin/usuarios/{id}", name="app_usuarioshow_single", defaults={"id": "null"},)
-
-    public function showSingle($id){
-
-        // puxa os dados filtrando pela id
-        $usuario = $this->getDoctrine()
-                        ->getRepository(Usuarios::class)
-                        ->find($id);
-
-        //puxa niveis para prencher o select
-        //recupera tabela de usuarios
-        $niveis = $this->getDoctrine()
-            ->getRepository(Niveis::class)
-            ->findAll();
-
-        // inicia o array para nao dar erro
-        $nivel = array();
-        if(!empty($niveis)) {
-            foreach ($niveis as $n) {
-                $nivel[$n->getId()] = $n->getName();
-            }
-        }
-
-
-        $campos = array(
-            [
-                'name'      => 'Id',
-                'class'     => 'col-md-4',
-                'default'   => (!empty($usuario)) ? $usuario->getId(): '',
-                'opt'       => 'readonly'
-            ],
-            [
-                'name'      => 'Nome',
-                'class'     => 'col-md-4',
-                'default'   => (!empty($usuario)) ? $usuario->getName(): ''
-            ],
-            [
-                'name'  => 'Login',
-                'class' => 'col-md-4',
-                'default'   => (!empty($usuario)) ? $usuario->getLogin(): ''
-            ],
-            [
-                'name'  => 'E-mail',
-                'class' => 'col-md-4',
-                'type'  => 'email',
-                'default'   => (!empty($usuario)) ? $usuario->getEmail(): ''
-            ],
-            [
-                'name'      => 'Nível',               //nome do imput e texto da label
-                'class'     => 'col-md-4',             //classes da div
-                'type'      => 'select',               //tipo do input, se array sera select
-                'values'    => $nivel,
-                //'opt'   => 'disabled',          //opcionais do input, uma string que sera printada
-                //'alias' => 'Primeiro nome'      //alias que apararecera na label sobrescrevendo o name
-                'default'   => (!empty($usuario)) ? $usuario->getNivel()->getId(): ''
-            ],
-            [
-                'name'  => 'Password',
-                'class' => 'col-md-4',
-                'default'   => (!empty($usuario)) ? $usuario->getPassword(): ''
-            ]
-        );
-
-        return $this->render('admin/admin_usuarios_single.html.twig', [
-            'campos' => $campos,
-            'id' => (!empty($usuario)) ? $usuario->getId(): ''
-        ]);
-    }
-
-    /**
-     * @Route("form/admin/usuarios/", name="salva_usuario", methods={"POST"})
-
-    public function Salva()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $request = Request::createFromGlobals();
-
-        $usuario = new Usuarios();
-        $usuario->setName($request->request->get("nome"));
-        $usuario->setEmail($request->request->get("e-mail"));
-        $usuario->setLogin($request->request->get("login"));
-        $usuario->setNivel($em->find("App:Niveis",$request->request->getInt("nivel")));
-        $usuario->setPassword($request->request->get("password"));
-
-        // se for novo nao tera id e ele precisa ser gerada pelo doctrine
-        if($request->request->get("id")){
-            $usuario->setId($request->request->get("id"));
-        }
-
-        // tell Doctrine you want to (eventually) save the Product (no queries yet)
-        $usuario = $em->merge($usuario);    // atualiza o objeto original
-
-        // actually executes the queries (i.e. the INSERT query)
-        $em->flush();
-
-        return$this->redirectToRoute('app_usuarioshow_single', ['id' => $usuario->getId()]);
-        //return $this->render('admin/admin_usuarios_single.html.twig');
-    }
-    */
 }

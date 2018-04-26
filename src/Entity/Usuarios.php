@@ -5,11 +5,12 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use function PHPSTORM_META\type;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UsuariosRepository")
  */
-class Usuarios
+class Usuarios implements UserInterface, \Serializable
 {
     /**
      * @ORM\Id
@@ -49,9 +50,15 @@ class Usuarios
      */
     private $password;
 
+    /**
+     * @ORM\Column(name="is_active", type="boolean")
+     */
+    private $isActive;
+
     // =================================================================================================================
     public function __construct()
     {
+        $this->isActive = true;
         $this->posts = new ArrayCollection();    // precisa ser arraycollection
     }
 
@@ -163,4 +170,50 @@ class Usuarios
     {
         $this->password = $password;
     }
+
+    public function getRoles()
+    {
+        return array('ROLE_ADMIN');
+    }
+
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->login,
+            $this->password,
+            // see section on salt below
+            // $this->salt,
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->login,
+            $this->password,
+            // see section on salt below
+            // $this->salt
+            ) = unserialize($serialized, ['allowed_classes' => false]);
+    }
+
+    public function getUsername()
+    {
+        return $this->login;
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
+    public function getSalt()
+    {
+        // you *may* need a real salt depending on your encoder
+        // see section on salt below
+        return null;
+    }
+
 }
