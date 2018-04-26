@@ -12,7 +12,7 @@ namespace App\Controller;
 use App\Controller\Forms\NiveisForms;
 use App\Entity\Niveis;
 use App\Services\Relatorios;
-use http\Env\Request;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -28,7 +28,16 @@ class NiveisController extends Controller
                     ->findAll();
 
         if(empty($obj)){
+            // quick fix para montar a arvore de objetos
+            $obj[0] = new Niveis();
 
+            // instancia e gera relatorio
+            $relatorios = new Relatorios();
+            $relatorios->setObj($obj);
+            $relatorio = $relatorios->getData();
+
+            // zera itens para consetar na view
+            $relatorio["itens"] = false;
         }
         else{
             $relatorios = new Relatorios();
@@ -46,7 +55,7 @@ class NiveisController extends Controller
     /**
      * @Route("admin/niveis/{id}", name="admin_niveis_single", defaults={"id": "null"})
      */
-    public function edit($id){
+    public function edit(Request $request, $id){
         // 1) build the form
         $nivel = $this->getDoctrine()
                     ->getRepository(Niveis::class)
@@ -57,6 +66,23 @@ class NiveisController extends Controller
         }
 
         $form = $this->createForm(NiveisForms::class, $nivel);
+
+        // 2) handle the submit (will only happen on POST)
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            // 4) save the User!
+            $em = $this->getDoctrine()->getManager();
+
+            // tell Doctrine you want to (eventually) save the Product (no queries yet)
+            $usuario = $em->merge($nivel);    // atualiza o objeto original
+
+            // actually executes the queries (i.e. the INSERT query)
+            $em->flush();
+
+            return $this->redirectToRoute('admin_niveis_single', ['id' => $usuario->getId()]);
+        }
 
         return $this->render('admin/admin_edit_padrao.html.twig',[
             'form' => $form->createView(),

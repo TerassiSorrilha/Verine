@@ -160,7 +160,7 @@ class UsuariosController extends Controller
             $usuario = new Usuarios();
         }
 
-        $form = $this->createForm(UsuariosForms::class, $usuario);
+        $form = $this->createForm( UsuariosForms::class, $usuario);
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
