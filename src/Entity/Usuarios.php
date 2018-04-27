@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use function PHPSTORM_META\type;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -55,9 +54,14 @@ class Usuarios implements UserInterface, \Serializable
      */
     private $isActive;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TODOQuadros", mappedBy="usuario")
+     */
+    private $quadros;
     // =================================================================================================================
     public function __construct()
     {
+        $this->quadros = new ArrayCollection();    // precisa ser arraycollection
         $this->isActive = true;
         $this->posts = new ArrayCollection();    // precisa ser arraycollection
     }
@@ -216,4 +220,11 @@ class Usuarios implements UserInterface, \Serializable
         return null;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getQuadros()
+    {
+        return $this->quadros;
+    }
 }
