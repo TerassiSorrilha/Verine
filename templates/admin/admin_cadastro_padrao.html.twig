@@ -1,12 +1,12 @@
 {% extends 'admin/admin_base.html.twig' %}
-{% block body %}
+{% block content %}
     {% if form is defined %}
         {% form_theme form 'blocks/form.html.twig' %}
         <div class="card">
-            <div class="card-header" data-background-color="purple">
-                <h4 class="title">Pesquisar</h4>
+            <div class="card-header card-header-primary" data-background-color="purple">
+                <h4 class="card-title">Pesquisar</h4>
             </div>
-            <div class="card-content">
+            <div class="card-body">
                 {{ form_start(form) }}
                 {{ form_widget(form) }}
                 {{ form_end(form) }}
@@ -14,10 +14,10 @@
         </div>
     {% endif %}
     <div class="card">
-        <div class="card-header" data-background-color="purple">
+        <div class="card-header card-header-primary">
             <div class="pull-left">
-                <h4 class="title">{{ title|capitalize }}</h4>
-                <p class="category">Edite ou adicione novos {{ title|lower }}</p>
+                <h4 class="card-title">{{ title|capitalize }}</h4>
+                <p class="card-category">Edite ou adicione novos {{ title|lower }}</p>
             </div>
             <div class="nav-tabs-navigation">
                 <div class="clearfix nav-tabs-wrapper">
@@ -43,7 +43,7 @@
                 </div>
             </div>
         </div>
-        <div class="card-content">
+        <div class="card-body">
             {% set tabela = [] %}
             {% set tabela = tabela|merge({"conteudo" : itens, "path" : edit}) %}
             {% include 'blocks/tabela.html.twig' %}

@@ -46,6 +46,9 @@ class UsuariosController extends Controller
                 'label' => "Nível",
                 'class' => Niveis::class,
                 'required' => false,
+                'label_attr' => [
+                    'class' => 'label-select'
+                ],
                 'choice_label' => 'name',
                 'attr' => [
                     'pai' => 'col-md-3'

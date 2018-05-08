@@ -28,7 +28,7 @@
     ]
 %}
 
-<div class="sidebar" data-color="purple" data-image="{{ asset('admin/img/sidebar-1.jpg') }}">
+<div class="sidebar" data-background-color="black" data-color="purple" data-image="{{ asset('admin/img/sidebar-1.jpg') }}">
     <!--
 Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
 
@@ -42,8 +42,8 @@ Tip 2: you can also add an image using data-image tag
     <div class="sidebar-wrapper">
         <ul class="nav">
             {% for item in menu %}
-                <li class="{{ app.request.attributes.get('_route') == item.path ? 'active' }}">
-                    <a href="{{ path(item.path) }}">
+                <li class="nav-item {{ app.request.attributes.get('_route') == item.path ? 'active' }}">
+                    <a class="nav-link" href="{{ path(item.path) }}">
                         <i class="material-icons">{{ item.icon }}</i>
                         <p>{{ item.title }}</p>
                     </a>

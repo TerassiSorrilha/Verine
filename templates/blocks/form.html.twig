@@ -1,22 +1,62 @@
 {% use "bootstrap_base_layout.html.twig" %}
 {# Rows #}
 
+{%- block form_rows -%}
+    {% if form.children.first.vars.name is defined %}
+        {% if form.children.first.vars.name != 'first' %}
+            <div class="row">
+                {% for child in form %}
+                    {{- form_row(child) -}}
+                {% endfor %}
+            </div>
+        {% else %}
+            {% for child in form %}
+                {{- form_row(child) -}}
+            {% endfor %}
+        {% endif %}
+    {% else %}
+        <div class="row">
+            {% for child in form %}
+                {{- form_row(child) -}}
+            {% endfor %}
+        </div>
+    {% endif %}
+{%- endblock form_rows -%}
+
 {% block form_row -%}
     {%- if compound is defined and compound -%}
         {%- set element = 'fieldset' -%}
     {%- endif -%}
 <div class="{% if attr.pai is defined %}{{ attr.pai }} {% endif %}">
-    <{{ element|default('div') }} class="form-group form-float">
-    <div class="form-line">
+    <{{ element|default('div') }} class="form-group bmd-form-group">
         {{- form_label(form) -}}
         {{- form_widget(form) -}}
         {{- form_errors(form) -}}
-    </div>
     </{{ element|default('div') }}>
     </div>
 {%- endblock form_row %}
 
 {# Widgets #}
+
+{%- block choice_widget_collapsed -%}
+    {%- if required and placeholder is none and not placeholder_in_choices and not multiple and (attr.size is not defined or attr.size <= 1) -%}
+        {% set required = false %}
+    {%- endif -%}
+    <select class="selectpicker" {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+        {%- if placeholder is not none -%}
+            <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder != '' ? (translation_domain is same as(false) ? placeholder : placeholder|trans({}, translation_domain)) }}</option>
+        {%- endif -%}
+        {%- if preferred_choices|length > 0 -%}
+            {% set options = preferred_choices %}
+            {{- block('choice_widget_options') -}}
+            {%- if choices|length > 0 and separator is not none -%}
+                <option disabled="disabled">{{ separator }}</option>
+            {%- endif -%}
+        {%- endif -%}
+        {%- set options = choices -%}
+        {{- block('choice_widget_options') -}}
+    </select>
+{%- endblock choice_widget_collapsed -%}
 
 {% block button_row -%}
     <div class="form-group {% if attr.pai is defined %}{{ attr.pai }} {% endif %}">
@@ -152,7 +192,7 @@
         {%- set element = 'legend' -%}
         {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' col-form-legend')|trim}) -%}
     {%- else -%}
-        {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' form-label')|trim}) -%}
+        {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' bmd-label-floating')|trim}) -%}
     {%- endif -%}
     {{- parent() -}}
 {%- endblock form_label %}

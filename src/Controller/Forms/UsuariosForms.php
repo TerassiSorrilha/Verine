@@ -47,6 +47,9 @@ class UsuariosForms extends AbstractType{
             ->add('nivel', EntityType::class,[
                 'class' => Niveis::class,
                 'choice_label' => 'name',
+                'label_attr' => [
+                    'class' => 'label-select'
+                ],
                 'attr' => [
                     'pai' => 'col-md-4',
                 ]

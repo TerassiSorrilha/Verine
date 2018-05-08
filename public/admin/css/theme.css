@@ -36,3 +36,22 @@
 .no-margin {
     margin: 0;
 }
+
+.btn-group.bootstrap-select{
+    margin: 0;
+}
+
+.form-group.bmd-form-group{
+    margin-top: 20px;
+}
+
+.form-group.bmd-form-group .label-select{
+    top: -19px;;
+}
+
+.btn-group.bootstrap-select .dropdown-toggle{
+    padding-top: 9px;
+    padding-bottom: 9px;
+    color: #aaa;
+    background: transparent;
+}
