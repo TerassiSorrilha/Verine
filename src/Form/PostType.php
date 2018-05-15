@@ -49,17 +49,38 @@ class PostType extends AbstractType
                     'autofocus' => true,
                     'pai' => 'col-md-12',
                 ],
-                'required' => false,
                 'label' => 'Titulo',
             ])
-            ->add('summary', TextType::class, [
-                'label' => 'Sumario',
+            ->add('subtitle', TextType::class, [
+                'label' => 'Subtitulo',
                 'attr' => [
                     'pai' => 'col-md-12',
                 ]
             ])
+            ->add('summary', TextareaType::class, [
+                'label' => 'Resumo',
+                'attr' => [
+                    'rows' => '4',
+                    'pai' => 'col-md-12',
+                ]
+            ])
+            ->add('insertAt', DateTimePickerType::class, [
+                'label' => 'Data Cadastro',
+                'format' => 'dd-MM-yyyy HH:mm',
+                'attr' => [
+                    'readonly' => 'readonly',
+                    'pai' => 'col-md-12',
+                ]
+            ])
             ->add('publishedAt', DateTimePickerType::class, [
-                'label' => 'Data',
+                'label' => 'Data Publicação',
+                'format' => 'dd-MM-yyyy HH:mm',
+                'attr' => [
+                    'pai' => 'col-md-12',
+                ]
+            ])
+            ->add('expiredAt', DateTimePickerType::class, [
+                'label' => 'Data Expiração',
                 'format' => 'dd-MM-yyyy HH:mm',
                 'attr' => [
                     'pai' => 'col-md-12',

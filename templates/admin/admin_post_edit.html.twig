@@ -1,6 +1,9 @@
 {% extends 'admin/admin_base.html.twig' %}
 {% form_theme form 'blocks/form.html.twig' %}
-
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('admin/js/plugins/bootstrap-tagsinput.js') }}"></script>
+{% endblock %}
 {% block content %}
     <div class="card">
         <div class="card-header row card-header-primary">
@@ -32,13 +35,15 @@
                     <div class="col-md-9">
                         <h4 class="title">Cabeçalho</h4>
                         {{ form_row(form.title) }}
+                        {{ form_row(form.subtitle) }}
                         {{ form_row(form.summary) }}
-                        {%  dump(form) %}
+                        {{ form_row(form.tags) }}
                     </div>
                     <div class="col-md-3">
                         <h4 class="title">Configurações</h4>
+                        {{ form_row(form.insertAt) }}
                         {{ form_row(form.publishedAt) }}
-                        {{ form_row(form.tags) }}
+                        {{ form_row(form.expiredAt) }}
                     </div>
                 </div>
                 <div class="row">

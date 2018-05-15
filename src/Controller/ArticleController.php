@@ -28,7 +28,7 @@ class ArticleController extends AbstractController
             "And expound the actual teachings of the great explorer of the truth, the master-builder of human happiness.",
             "No one rejects, dislikes, or avoids pleasure itself, because it is pleasure"
         ];
-        return $this->render('article/show.html.twig',[
+        return $this->render('article/post_show.html.twig',[
             'title' => ucwords(str_replace('-', ' ', $slug)),
             'slug' => $slug,
             'comments' => $comments

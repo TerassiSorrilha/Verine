@@ -52,6 +52,13 @@ class Post
      *
      * @ORM\Column(type="string")
      */
+    private $subtitle;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
     private $slug;
 
     /**
@@ -69,11 +76,29 @@ class Post
     private $content;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isActive;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
      */
     private $publishedAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     */
+    private $expiredAt;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime")
+     */
+    private $insertAt;
 
     /**
      * @var Usuarios
@@ -107,7 +132,10 @@ class Post
 
     public function __construct()
     {
+        $this->setIsActive(true);
         $this->publishedAt = new \DateTime();
+        $this->insertAt = new \DateTime();
+        $this->expiredAt = new \DateTime();
         $this->comments = new ArrayCollection();
         $this->tags = new ArrayCollection();
     }
@@ -116,7 +144,11 @@ class Post
         $array = [
             "Id" => (!empty($this->id)) ? $this->getId(): "",
             "Titulo" => (!empty($this->title)) ? $this->getTitle(): "",
-            "data" => (!empty($this->publishedAt)) ? $this->getPublishedAt()->format('d-m-Y H:i'): ""
+            "Subtitulo" => (!empty($this->subtitle)) ? $this->getSubtitle(): "",
+            "Resumo" => (!empty($this->summary)) ? $this->getSummary(): "",
+            "Data cadastro" => (!empty($this->insertAt)) ? $this->getInsertAt()->format('d-m-Y H:i'): "",
+            "Data publicação" => (!empty($this->publishedAt)) ? $this->getPublishedAt()->format('d-m-Y H:i'): "",
+            "Data Expiração" => (!empty($this->expiredAt)) ? $this->getExpiredAt()->format('d-m-Y H:i'): "",
         ];
 
         // gera nomes
@@ -143,6 +175,16 @@ class Post
         return $this->slug;
     }
 
+    public function getSubtitle(): ?string
+    {
+        return $this->subtitle;
+    }
+
+    public function setSubtitle(string $subtitle): void
+    {
+        $this->subtitle = $subtitle;
+    }
+
     public function setSlug(?string $slug): void
     {
         $this->slug = $slug;
@@ -156,6 +198,26 @@ class Post
     public function setContent(?string $content): void
     {
         $this->content = $content;
+    }
+
+    public function getExpiredAt(): \DateTime
+    {
+        return $this->expiredAt;
+    }
+
+    public function setExpiredAt(?\DateTime $expiredAt): void
+    {
+        $this->expiredAt = $expiredAt;
+    }
+
+    public function getInsertAt(): \DateTime
+    {
+        return $this->insertAt;
+    }
+
+    public function setInsertAt(?\DateTime $insertAt): void
+    {
+        $this->insertAt = $insertAt;
     }
 
     public function getPublishedAt(): \DateTime
@@ -225,4 +287,22 @@ class Post
     {
         return $this->tags;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getisActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * @param mixed $isActive
+     */
+    public function setIsActive($isActive): void
+    {
+        $this->isActive = $isActive;
+    }
+
+
 }
