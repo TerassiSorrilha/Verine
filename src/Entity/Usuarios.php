@@ -25,11 +25,6 @@ class Usuarios implements UserInterface, \Serializable
     private $nivel;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Usuarios", mappedBy="autor")
-     */
-    protected $posts;
-
-    /**
      * @ORM\Column(type="string")
      */
     private $name;
@@ -58,12 +53,18 @@ class Usuarios implements UserInterface, \Serializable
      * @ORM\OneToMany(targetEntity="App\Entity\TODOQuadros", mappedBy="usuario")
      */
     private $quadros;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
     // =================================================================================================================
     public function __construct()
     {
         $this->quadros = new ArrayCollection();    // precisa ser arraycollection
         $this->isActive = true;
-        $this->posts = new ArrayCollection();    // precisa ser arraycollection
     }
 
     public function relatorio(){
@@ -175,9 +176,24 @@ class Usuarios implements UserInterface, \Serializable
         $this->password = $password;
     }
 
-    public function getRoles()
+    /**
+     * Returns the roles or permissions granted to the user for security.
+     */
+    public function getRoles(): array
     {
-        return array('ROLE_ADMIN');
+        $roles = $this->roles;
+
+        // guarantees that a user always has at least one role for security
+        if (empty($roles)) {
+            $roles[] = 'ROLE_ADMIN';
+        }
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): void
+    {
+        $this->roles = $roles;
     }
 
     /** @see \Serializable::serialize() */

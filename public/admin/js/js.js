@@ -1,6 +1,14 @@
 $(document).ready(function(){
+    // inicia datepicker
+    md.initFormExtendedDatetimepickers();
+
     $(".gerar_rows form").each(function(){
        //new Rows(this);
+    });
+
+    $(".gerar_WYSIWYG").froalaEditor({
+        heightMin: 300,
+        heightMax: 1000
     });
 });
 

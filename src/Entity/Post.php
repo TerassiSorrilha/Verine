@@ -1,15 +1,39 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
+ * @ORM\Table(name="symfony_demo_post")
+ *
+ * Defines the properties of the Post entity to represent the blog posts.
  */
 class Post
 {
     /**
+     * Use constants to define configuration options that rarely change instead
+     * of specifying them under parameters section in config/services.yaml file.
+     *
+     * See https://symfony.com/doc/current/best_practices/configuration.html#constants-vs-configuration-options
+     */
+    public const NUM_ITEMS = 10;
+
+    /**
+     * @var int
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -17,140 +41,188 @@ class Post
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @var string
+     *
+     * @ORM\Column(type="string")
      */
-    private $categoria;
+    private $title;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    private $slug;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    private $summary;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(type="text")
      */
-    private $texto;
+    private $content;
 
     /**
-     * @ORM\Column(type="string")
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
      */
-    private $titulo;
+    private $publishedAt;
 
     /**
-     * @ORM\Column(type="string")
+     * @var Usuarios
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Usuarios")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $subtitulo;
+    private $author;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Post", inversedBy="posts")
-     * @ORM\JoinColumn(name="autor", referencedColumnName="id")
+     * @var Comment[]|ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *      targetEntity="Comment",
+     *      mappedBy="post",
+     *      orphanRemoval=true,
+     *      cascade={"persist"}
+     * )
+     * @ORM\OrderBy({"publishedAt": "DESC"})
      */
-    private $autor;
+    private $comments;
 
-    // =================================================================================================================
+    /**
+     * @var Tag[]|ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Tag", cascade={"persist"})
+     * @ORM\JoinTable(name="symfony_demo_post_tag")
+     * @ORM\OrderBy({"name": "ASC"})
+     */
+    private $tags;
+
+    public function __construct()
+    {
+        $this->publishedAt = new \DateTime();
+        $this->comments = new ArrayCollection();
+        $this->tags = new ArrayCollection();
+    }
+
     public function relatorio(){
         $array = [
             "Id" => (!empty($this->id)) ? $this->getId(): "",
-            "Categoria" => (!empty($this->categoria)) ? $this->getCategoria(): "",
-            "Texto" => (!empty($this->texto)) ? $this->getTexto(): "",
-            "Titulo" => (!empty($this->titulo)) ? $this->getTitulo(): "",
-            "Autor" => (!empty($this->autor)) ? $this->getAutor(): "",
-            "Subtitulo" => (!empty($this->subtitulo)) ? $this->getSubtitulo(): ""
+            "Titulo" => (!empty($this->title)) ? $this->getTitle(): "",
+            "data" => (!empty($this->publishedAt)) ? $this->getPublishedAt()->format('d-m-Y H:i'): ""
         ];
 
         // gera nomes
         return $array;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param mixed $id
-     */
-    public function setId($id): void
+    public function getTitle(): ?string
     {
-        $this->id = $id;
+        return $this->title;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCategoria()
+    public function setTitle(?string $title): void
     {
-        return $this->categoria;
+        $this->title = $title;
     }
 
-    /**
-     * @param mixed $categoria
-     */
-    public function setCategoria($categoria): void
+    public function getSlug(): ?string
     {
-        $this->categoria = $categoria;
+        return $this->slug;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTexto()
+    public function setSlug(?string $slug): void
     {
-        return $this->texto;
+        $this->slug = $slug;
     }
 
-    /**
-     * @param mixed $texto
-     */
-    public function setTexto($texto): void
+    public function getContent(): ?string
     {
-        $this->texto = $texto;
+        return $this->content;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTitulo()
+    public function setContent(?string $content): void
     {
-        return $this->titulo;
+        $this->content = $content;
     }
 
-    /**
-     * @param mixed $titulo
-     */
-    public function setTitulo($titulo): void
+    public function getPublishedAt(): \DateTime
     {
-        $this->titulo = $titulo;
+        return $this->publishedAt;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getSubtitulo()
+    public function setPublishedAt(?\DateTime $publishedAt): void
     {
-        return $this->subtitulo;
+        $this->publishedAt = $publishedAt;
     }
 
-    /**
-     * @param mixed $subtitulo
-     */
-    public function setSubtitulo($subtitulo): void
+    public function getAuthor(): Usuarios
     {
-        $this->subtitulo = $subtitulo;
+        return $this->author;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getAutor()
+    public function setAuthor(?Usuarios $author): void
     {
-        return $this->autor;
+        $this->author = $author;
     }
 
-    /**
-     * @param mixed $autor
-     */
-    public function setAutor($autor): void
+    public function getComments(): Collection
     {
-        $this->autor = $autor;
+        return $this->comments;
     }
 
+    public function addComment(?Comment $comment): void
+    {
+        $comment->setPost($this);
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+        }
+    }
+
+    public function removeComment(Comment $comment): void
+    {
+        $comment->setPost(null);
+        $this->comments->removeElement($comment);
+    }
+
+    public function getSummary(): ?string
+    {
+        return $this->summary;
+    }
+
+    public function setSummary(?string $summary): void
+    {
+        $this->summary = $summary;
+    }
+
+    public function addTag(?Tag ...$tags): void
+    {
+        foreach ($tags as $tag) {
+            if (!$this->tags->contains($tag)) {
+                $this->tags->add($tag);
+            }
+        }
+    }
+
+    public function removeTag(Tag $tag): void
+    {
+        $this->tags->removeElement($tag);
+    }
+
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
 }

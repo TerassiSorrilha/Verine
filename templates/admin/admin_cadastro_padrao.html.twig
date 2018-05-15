@@ -14,32 +14,41 @@
         </div>
     {% endif %}
     <div class="card">
-        <div class="card-header card-header-primary">
-            <div class="pull-left">
+        <div class="card-header row card-header-primary">
+            <div class="col-md-6">
                 <h4 class="card-title">{{ title|capitalize }}</h4>
                 <p class="card-category">Edite ou adicione novos {{ title|lower }}</p>
             </div>
-            <div class="nav-tabs-navigation">
-                <div class="clearfix nav-tabs-wrapper">
-                    <ul class="nav nav-tabs navbar-right" data-tabs="tabs">
-                        <li class="active">
-                            <a href="#profile" data-toggle="tab">
-                                <i class="material-icons">bug_report</i> Bugs
-                                <div class="ripple-container"></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#messages" data-toggle="tab">
-                                <i class="material-icons">code</i> Website
-                                <div class="ripple-container"></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="btn btn-white btn-round btn-just-icon retornar" href="{{ path( edit ,{id:'novo'}) }}">
-                                <i class="material-icons">add</i>
-                            </a>
-                        </li>
-                    </ul>
+
+            <div class="col-md-6">
+                <div class="nav-tabs-navigation pull-right">
+                    <div class="nav-tabs-wrapper">
+                        <ul class="nav nav-tabs" data-tabs="tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#profile" data-toggle="tab">
+                                    <i class="material-icons">bug_report</i>Bugs
+                                    <div class="ripple-container"></div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#messages" data-toggle="tab">
+                                    <i class="material-icons">code</i>Website
+                                    <div class="ripple-container"></div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#settings" data-toggle="tab">
+                                    <i class="material-icons">cloud</i>Server
+                                    <div class="ripple-container"></div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn btn-white btn-round btn-just-icon retornar" href="{{ path( edit ,{id:'novo'}) }}">
+                                    <i class="material-icons">add</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

@@ -23,6 +23,9 @@
         {% block stylesheets %}
             <!-- CSS
             ================================================== -->
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.8.1/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.8.1/css/froala_style.min.css" rel="stylesheet" type="text/css" />
+
             <link rel="stylesheet" href="{{ asset('admin/css/perfect-scrollbar.css') }}">
             <link rel="stylesheet" href="{{ asset('admin/css/material-dashboard.css?v=2.0.1') }}">
             <link rel="stylesheet" href="{{ asset('admin/css/demo.css') }}">
@@ -35,7 +38,9 @@
             ================================================== -->
             <script src="{{ asset('admin/js/core/jquery.min.js') }}"></script>
             <script src="{{ asset('admin/js/core/popper.min.js') }}"></script>
+            <script src="{{ asset('admin/js/plugins/moment.min.js') }}"></script>
             <script src="{{ asset('admin/js/bootstrap-material-design.js') }}"></script>
+            <script src="{{ asset('admin/js/plugins/bootstrap-datetimepicker.min.js') }}"></script>
             <script src="{{ asset('admin/js/plugins/perfect-scrollbar.jquery.min.js') }}"></script>
             <script src="{{ asset('admin/js/plugins/chartist.min.js') }}"></script>
             <script src="{{ asset('admin/js/plugins/arrive.min.js') }}"></script>
@@ -43,6 +48,11 @@
             <script src="{{ asset('admin/js/plugins/bootstrap-selectpicker.js') }}"></script>
             <script src="{{ asset('admin/js/material-dashboard.js?v=2.0.0') }}"></script>
             <script src="{{ asset('admin/js/demo.js') }}"></script>
+
+            <!-- Include Editor JS files. -->
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.8.1/js/froala_editor.pkgd.min.js"></script>
+
+
             <script src="{{ asset('admin/js/js.js') }}"></script>
 
         {% endblock %}
