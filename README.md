@@ -14,13 +14,15 @@ O symfony não precisa estar dentro de um virtual host para funcionar, então po
 
 5- Volte para o terminal e digite o comando 'php bin/console doctrine:database:create', com isto seu banco de dados será criado;
 
-6- Execute o comando 'php bin/console doctrine:migrations:diff'. Isto vai comparar seu BD com o codigo.
+6- Execute o comando 'php bin/console doctrine:migrations:diff'. Isto vai comparar seu BD com o codigo;
 
-7- Execute o comando 'php bin/console doctrine:migrations:migrate' e confirme com 'y' quando precisar.
+7- Execute o comando 'php bin/console doctrine:migrations:migrate' e confirme com 'y' quando precisar;
+
+8- Execute o comando para instalar o primeiro usuario 'php bin/console app:add-user'.
 
 ### Até aqui seu banco de dados ja foi configurado e o symfony instalado.
 
-8- Execute o comando 'php bin/console server:run 0.0.0.0:8000' para iniciar o sistema.
+9- Execute o comando 'php bin/console server:run 0.0.0.0:8000' para iniciar o sistema.
 
 ### Fim
 
@@ -28,7 +30,8 @@ Agora o sistema ja está online e assivel pelo seu IP interno na rede ou pelo 'l
 
 Lembrar de usar a porta, que neste caso é '8000' ficando 'localhost:8000'.
 
-### Usuario padrão
+### Paths temporarios
 
-No primeiro acesso voce pode usar admin : admin para acessar o sistema na tela de login que aparece acessando o path:
-'localhost:8000/admin/usuarios/'
+Blog: localhost:8000
+administração: localhost:8000/admin/post/
+
