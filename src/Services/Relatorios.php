@@ -38,11 +38,10 @@ class Relatorios
      */
     public function getData()
     {
-        if(empty($this->obj)){
-            return "Sem dados para o relatorio";
-        }
+        $relatorio = $this->getRelatorio();
+
         $this->header = $this->getHeader();
-        $this->data["itens"] = $this->getRelatorio();
+        $this->data["itens"] = (empty($relatorio[0]["Id"]) ? false : $relatorio);
         $this->data["header"] = $this->header;
         return $this->data;
     }

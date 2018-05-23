@@ -40,8 +40,8 @@ class Validator
             throw new InvalidArgumentException('The password can not be empty.');
         }
 
-        if (mb_strlen(trim($plainPassword)) < 6) {
-            throw new InvalidArgumentException('The password must be at least 6 characters long.');
+        if (mb_strlen(trim($plainPassword)) < 4) {
+            throw new InvalidArgumentException('The password must be at least 4 characters long.');
         }
 
         return $plainPassword;

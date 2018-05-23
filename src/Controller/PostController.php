@@ -8,15 +8,13 @@
 
 namespace App\Controller;
 
-
-use App\Controller\Forms\PostForms;
 use App\Entity\Post;
 use App\Form\PostType;
-use App\Services\Relatorios;
+use App\Services\Filtros;
 use App\Utils\Slugger;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @Route("/admin/post")
  * @Security("has_role('ROLE_ADMIN')")
  */
-class PostController extends AbstractController
+class PostController extends Controller
 {
 
     /**
@@ -44,32 +42,11 @@ class PostController extends AbstractController
      */
     public function index(): Response
     {
-        //recupera tabela de usuarios
-        $obj = $this->getDoctrine()
-            ->getRepository(Post::class)
-            ->findAll();
-
-        if(empty($obj)) {
-            // quick fix para montar a arvore de objetos
-            $obj[0] = new Post();
-
-                // instancia e gera relatorio
-            $relatorios = new Relatorios();
-            $relatorios->setObj($obj);
-            $relatorio = $relatorios->getData();
-
-                // zera itens para consetar na view
-            $relatorio["itens"] = false;
-        }
-        else{
-            // instancia e gera relatorio
-            $relatorios = new Relatorios();
-            $relatorios->setObj($obj);
-            $relatorio = $relatorios->getData();
-        }
+        $form = new Filtros(Post::class, $this);
+        $form->trataObjetos();
 
         return $this->render('admin/admin_cadastro_padrao.html.twig', [
-            'itens' => $relatorio,
+            'itens' => $form->getDados(),
             'title' => 'Posts',
             'edit' => 'admin_post_single',
         ]);

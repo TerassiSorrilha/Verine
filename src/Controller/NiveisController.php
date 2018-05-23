@@ -9,51 +9,34 @@
 namespace App\Controller;
 
 
-use App\Controller\Forms\NiveisForms;
 use App\Entity\Niveis;
-use App\Services\Relatorios;
+use App\Form\NiveisType;
+use App\Services\Filtros;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-
+/**
+ * @Route("/admin/niveis")
+ */
 class NiveisController extends Controller
 {
     /**
-     * @Route("/admin/niveis/", name="admin_niveis")
+     * @Route("/", name="admin_niveis")
      */
     public function show(){
-        $obj = $this->getDoctrine()
-                    ->getRepository(Niveis::class)
-                    ->findAll();
-
-        if(empty($obj)){
-            // quick fix para montar a arvore de objetos
-            $obj[0] = new Niveis();
-
-            // instancia e gera relatorio
-            $relatorios = new Relatorios();
-            $relatorios->setObj($obj);
-            $relatorio = $relatorios->getData();
-
-            // zera itens para consetar na view
-            $relatorio["itens"] = false;
-        }
-        else{
-            $relatorios = new Relatorios();
-            $relatorios->setObj($obj);
-            $relatorio = $relatorios->getData();
-        }
+        $form = new Filtros(Niveis::class, $this);
+        $form->trataObjetos();
 
         return $this->render('admin/admin_cadastro_padrao.html.twig', [
-            'itens' => $relatorio,
+            'itens' => $form->getDados(),
             'title' => 'Níveis',
             'edit' => 'admin_niveis_single',
         ]);
     }
 
     /**
-     * @Route("admin/niveis/{id}", name="admin_niveis_single", defaults={"id": "null"})
+     * @Route("/{id}", name="admin_niveis_single", defaults={"id": "null"})
      */
     public function edit(Request $request, $id){
         // 1) build the form
@@ -65,7 +48,7 @@ class NiveisController extends Controller
             $nivel = new Niveis();
         }
 
-        $form = $this->createForm(NiveisForms::class, $nivel);
+        $form = $this->createForm(NiveisType::class, $nivel);
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);

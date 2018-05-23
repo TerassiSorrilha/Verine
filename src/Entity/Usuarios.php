@@ -32,7 +32,7 @@ class Usuarios implements UserInterface, \Serializable
     /**
      * @ORM\Column(type="string")
      */
-    private $login;
+    private $username;
 
     /**
      * @ORM\Column(type="string")
@@ -73,7 +73,7 @@ class Usuarios implements UserInterface, \Serializable
             "Nome" => (!empty($this->name)) ? $this->getName(): "",
             "Nível" => (!empty($this->nivel)) ? $this->getNivel()->getName(): "",
             "E-mail" => (!empty($this->email)) ? $this->getEmail(): "",
-            "Login" => (!empty($this->login)) ? $this->getLogin(): ""
+            "Login" => (!empty($this->username)) ? $this->getUsername(): ""
         ];
 
         // gera nomes
@@ -131,17 +131,17 @@ class Usuarios implements UserInterface, \Serializable
     /**
      * @return mixed
      */
-    public function getLogin()
+    public function getUsername()
     {
-        return $this->login;
+        return $this->username;
     }
 
     /**
-     * @param mixed $login
+     * @param mixed $username
      */
-    public function setLogin($login): void
+    public function setUsername($username): void
     {
-        $this->login = $login;
+        $this->username = $username;
     }
 
     /**
@@ -201,7 +201,7 @@ class Usuarios implements UserInterface, \Serializable
     {
         return serialize(array(
             $this->id,
-            $this->login,
+            $this->username,
             $this->password,
             // see section on salt below
             // $this->salt,
@@ -213,16 +213,11 @@ class Usuarios implements UserInterface, \Serializable
     {
         list (
             $this->id,
-            $this->login,
+            $this->username,
             $this->password,
             // see section on salt below
             // $this->salt
             ) = unserialize($serialized, ['allowed_classes' => false]);
-    }
-
-    public function getUsername()
-    {
-        return $this->login;
     }
 
     public function eraseCredentials()
