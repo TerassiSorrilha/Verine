@@ -40,7 +40,7 @@ class PostController extends Controller
      * @Route("/", methods={"GET"}, name="admin_index")
      * @Route("/", methods={"GET"}, name="admin_post_index")
      */
-    public function index(): Response
+    public function index()
     {
         $form = new Filtros(Post::class, $this);
         $form->trataObjetos();
@@ -61,7 +61,7 @@ class PostController extends Controller
      * to constraint the HTTP methods each controller responds to (by default
      * it responds to all methods).
      */
-    public function edita(Request $request, $id): Response
+    public function edita(Request $request, $id)
     {
         // 1) build the form
         $post = $this->getDoctrine()

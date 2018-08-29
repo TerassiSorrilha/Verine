@@ -1,63 +1,233 @@
 {% extends 'admin/admin_base.html.twig' %}
 {% block content %}
     <div class="card">
-        <div class="card-content">
-            <h4 class="title">TODO</h4>
-            <p class="category">Edite ou adicione novos TODO</p>
-        </div>
-    </div>
-    <!-- Listas -->
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card card-plain">
-                <div class="card-header" data-background-color="purple">
-                    <h4 class="title">TODO</h4>
-                </div>
-                <div class="card-content">
-                    <!-- Cards -->
-                    <div class="card">
-                        <div class="card-content">
-                            as
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-content">
-                            as
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-content">
-                            as
-                        </div>
-                    </div>
-                </div>
+        <div class="card-header card-header-text card-header-primary">
+            <div class="card-text">
+                <h4 id="quadro_title" class="card-title">TODO</h4>
+                <p class="card-category">Edite ou adicione novas Tarefas</p>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card card-plain">
-                <div class="card-header" data-background-color="purple">
-                    <h4 class="title">TODO</h4>
-                </div>
-                <div class="card-content">
-                    <!-- Cards -->
-                    <div class="card">
-                        <div class="card-content">
-                            as
+
+        <div class="card-body">
+            <div class="row listas_wrapper">
+                <!-- Listas -->
+                <div class="listas_sortable">
+                    <div class="listas" >
+                        <h4 class="title">lista1</h4>
+                        <div class="cards_sortable">
+                            <div class="card">
+                                card1
+                            </div>
+                            <div class="card">
+                                card2
+                            </div>
+                            <div class="card">
+                                card3
+                            </div>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-content">
-                            as
+                    <div class="listas" >
+                        <h4 class="title">lista1</h4>
+                        <div class="cards_sortable">
+                            <div class="card">
+                                card1
+                            </div>
+                            <div class="card">
+                                card2
+                            </div>
+                            <div class="card">
+                                card3
+                            </div>
+                        </div>
+                    </div><div class="listas" >
+                        <h4 class="title">lista1</h4>
+                        <div class="cards_sortable">
+                            <div class="card">
+                                card1
+                            </div>
+                            <div class="card">
+                                card2
+                            </div>
+                            <div class="card">
+                                card3
+                            </div>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-content">
-                            as
+                    <div class="listas" >
+                        <h4 class="title">lista1</h4>
+                        <div class="cards_sortable">
+                            <div class="card">
+                                card1
+                            </div>
+                            <div class="card">
+                                card2
+                            </div>
+                            <div class="card">
+                                card3
+                            </div>
                         </div>
                     </div>
+                    <div class="listas" >
+                        <h4 class="title">lista1</h4>
+                        <div class="cards_sortable">
+                            <div class="card">
+                                card1
+                            </div>
+                            <div class="card">
+                                card2
+                            </div>
+                            <div class="card">
+                                card3
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <style>
+        .listas_wrapper{
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+        .listas_sortable{
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            overflow-x: scroll;
+            overflow-y: hidden;
+            display: flex;
+
+        }
+
+        .listas_sortable .listas{
+            float: left;
+            width: 280px;
+            min-width: 200px;
+            background: #e4e4e4;
+            display: inline-block;
+        }
+
+        .ui-state-highlight {
+            margin: 0 5px 5px 5px;
+            padding: 5px;
+            font-size: 1.2em;
+            height: 1.5em;
+            line-height: 1.2em;
+            list-style: none;
+        }
+        .ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+            border: 1px solid #dad55e;
+            background: #fffa90;
+            color: #777620;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function(){
+            var todo = new TODO();
+            todo.getQuadro();
+        });
+
+        class TODO {
+            constructor(){
+
+            }
+
+            /**
+             *  transforma a arvore em html
+             */
+            quadrosDOM(){
+                $("#quadro_title").text(this.arvore.nome);
+                this.listasDOM();
+                this.events();
+            }
+
+            /**
+             *  transforma a arvore em html
+             */
+            listasDOM(){
+                var obj = $(".listas_sortable");
+                for(var i = 0; i < this.arvore.listas.length -1; i++){
+                    var atual = this.arvore.listas[i];
+
+                    // primeiro cria a lista
+                    var lista = document.createElement("div");
+                        lista.className = "listas";
+
+                    // monta o resto da DOM
+                    var domstring = "<h4 class='title'>"+atual.nome+"</h4>";
+                        domstring+= "<div class='cards_sortable'>";
+                        domstring+= "</ul>";
+
+                    //salva tudo na lista
+                    lista.innerHTML = domstring;
+
+                    // monta a lista de cards
+                    this.cardsDOM(atual, lista);
+                    $(obj).append(lista);
+                }
+            }
+
+            /**
+             * transforma a arvore em html
+             */
+            cardsDOM(obj, dom){
+                for(var i = 0; i < obj.cartoes.length -1; i++){
+                    var atual = obj.cartoes[i];
+
+                    //primeiro cria o card
+                    var card = document.createElement("div");
+                    card.className = "card";
+
+                    // monta o resto da DOM
+                    var domstring = "<h4 class='title'>"+atual.nome+"</h4>";
+                        domstring+= "<p>"+atual.descricao+"</p>";
+
+                    card.innerHTML = domstring;
+                    $(dom).find(".cards_sortable").append(card);
+                }
+            }
+
+            /**
+             *  Recupera os dados
+             */
+            getQuadro(){
+                var elemento = this;
+                $.ajax({
+                    method: 'GET',
+                    url: '{{ path(got, {'id' : id}) }}'
+                }).done(function(data) {
+                    elemento.arvore = (JSON).parse(data); //preciso fazer o parse
+                    elemento.quadrosDOM();
+                })
+            }
+
+            /**
+             *  Salva os dados
+             */
+            setQuadro(){
+
+            }
+
+            /**
+             *  Recarrega os eventos
+             */
+            events(){
+                $( ".listas_sortable" ).sortable({
+                    placeholder: "ui-state-highlight col-md-4"
+                }).disableSelection();
+                $( ".cards_sortable" ).sortable({
+                    placeholder: "ui-state-highlight",
+                    connectWith: ".cards_sortable"
+                }).disableSelection();
+            }
+        }
+    </script>
 {% endblock %}
