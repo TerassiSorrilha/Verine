@@ -18,7 +18,7 @@ O symfony não precisa estar dentro de um virtual host para funcionar, então po
 
 7- Execute o comando 'php bin/console doctrine:migrations:migrate' e confirme com 'y' quando precisar;
 
-8- Execute o comando para instalar o primeiro usuario 'php bin/console app:add-user'.
+8- Execute o comando para instalar o primeiro usuario 'php bin/console app:add-user'. (opcional)
 
 ### Até aqui seu banco de dados ja foi configurado e o symfony instalado.
 
@@ -34,4 +34,7 @@ Lembrar de usar a porta, que neste caso é '8000' ficando 'localhost:8000'.
 
 Blog: localhost:8000
 administração: localhost:8000/admin/post/
+
+Usuario: admin
+Senha: admin
 
