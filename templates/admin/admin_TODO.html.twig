@@ -4,86 +4,20 @@
         <div class="card-header card-header-text card-header-primary">
             <div class="card-text">
                 <h4 id="quadro_title" class="card-title">TODO</h4>
+                <input type="hidden" value="" name="quadro_id" id="quadro_id">
                 <p class="card-category">Edite ou adicione novas Tarefas</p>
             </div>
         </div>
 
         <div class="card-body">
-            <div class="row listas_wrapper">
+            <div class="listas_wrapper">
                 <!-- Listas -->
                 <div class="listas_sortable">
-                    <div class="listas" >
-                        <h4 class="title">lista1</h4>
-                        <div class="cards_sortable">
-                            <div class="card">
-                                card1
-                            </div>
-                            <div class="card">
-                                card2
-                            </div>
-                            <div class="card">
-                                card3
-                            </div>
-                        </div>
-                    </div>
-                    <div class="listas" >
-                        <h4 class="title">lista1</h4>
-                        <div class="cards_sortable">
-                            <div class="card">
-                                card1
-                            </div>
-                            <div class="card">
-                                card2
-                            </div>
-                            <div class="card">
-                                card3
-                            </div>
-                        </div>
-                    </div><div class="listas" >
-                        <h4 class="title">lista1</h4>
-                        <div class="cards_sortable">
-                            <div class="card">
-                                card1
-                            </div>
-                            <div class="card">
-                                card2
-                            </div>
-                            <div class="card">
-                                card3
-                            </div>
-                        </div>
-                    </div>
-                    <div class="listas" >
-                        <h4 class="title">lista1</h4>
-                        <div class="cards_sortable">
-                            <div class="card">
-                                card1
-                            </div>
-                            <div class="card">
-                                card2
-                            </div>
-                            <div class="card">
-                                card3
-                            </div>
-                        </div>
-                    </div>
-                    <div class="listas" >
-                        <h4 class="title">lista1</h4>
-                        <div class="cards_sortable">
-                            <div class="card">
-                                card1
-                            </div>
-                            <div class="card">
-                                card2
-                            </div>
-                            <div class="card">
-                                card3
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
             </div>
+
+            <button onclick="TODO.listToDOM()" class="pull-right btn btn-primary btn-sm">adicionar lista</button>
         </div>
     </div>
 
@@ -97,21 +31,53 @@
             overflow-y: hidden;
         }
         .listas_sortable{
+            padding: 0 0 20px 0;
             list-style: none;
             margin: 0;
-            padding: 0;
             overflow-x: scroll;
             overflow-y: hidden;
             display: flex;
-
         }
 
         .listas_sortable .listas{
             float: left;
-            width: 280px;
-            min-width: 200px;
-            background: #e4e4e4;
+            min-width: 270px;
             display: inline-block;
+            min-height: 100px;
+            margin-right: 15px;
+        }
+
+        .listas_content{
+            background: #e4e4e4;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .listas_content .title{
+            margin: 0;
+            font-weight: 900;
+            min-height: auto;
+        }
+
+        .listas_content textarea.title{
+            background: #dadada;
+            border: none;
+            width: 100%;
+            font-size: 1.125rem;
+            line-height: 1.4em;
+        }
+
+        .listas_content p{
+            font-weight: 100;
+        }
+
+        .cards_sortable{
+            min-height: 78px;
+        }
+
+        .cards_sortable .card{
+            padding: 10px;
+            margin: 10px 0;
         }
 
         .ui-state-highlight {
@@ -119,6 +85,7 @@
             padding: 5px;
             font-size: 1.2em;
             height: 1.5em;
+            min-height: 50px;
             line-height: 1.2em;
             list-style: none;
         }
@@ -137,7 +104,7 @@
 
         class TODO {
             constructor(){
-
+                this.lista_mother = $(".listas_sortable");
             }
 
             /**
@@ -145,53 +112,118 @@
              */
             quadrosDOM(){
                 $("#quadro_title").text(this.arvore.nome);
-                this.listasDOM();
-                this.events();
+                $("#quadro_id").val(this.arvore.id);
+                this.listasToList();
             }
 
             /**
-             *  transforma a arvore em html
+             *  transforma a array em lista unica
              */
-            listasDOM(){
-                var obj = $(".listas_sortable");
-                for(var i = 0; i < this.arvore.listas.length -1; i++){
+            listasToList(){
+                for(var i = 0; i <= this.arvore.listas.length -1; i++){
                     var atual = this.arvore.listas[i];
 
-                    // primeiro cria a lista
-                    var lista = document.createElement("div");
-                        lista.className = "listas";
-
-                    // monta o resto da DOM
-                    var domstring = "<h4 class='title'>"+atual.nome+"</h4>";
-                        domstring+= "<div class='cards_sortable'>";
-                        domstring+= "</ul>";
-
-                    //salva tudo na lista
-                    lista.innerHTML = domstring;
+                    var lista = TODO.listToDOM(atual);
 
                     // monta a lista de cards
-                    this.cardsDOM(atual, lista);
-                    $(obj).append(lista);
+                    TODO.cardsToCard(atual, lista);
+
+                    $(this.lista_mother).append(lista);
                 }
             }
 
             /**
-             * transforma a arvore em html
+             * transforma uma unica lista em html
              */
-            cardsDOM(obj, dom){
-                for(var i = 0; i < obj.cartoes.length -1; i++){
+            static listToDOM(obj = false){
+                var retornar = true;
+                if(!obj){
+                    obj = {
+                        nome: "nova lista " + Math.floor((Math.random() * 10000) + 1),
+                        id: ""
+                    };
+                    retornar = false;
+                }
+                // primeiro cria a lista
+                var lista = document.createElement("div");
+                    lista.className = "listas";
+
+                // monta o resto da DOM
+
+                var domstring = "<div class='listas_content'>";
+                    domstring+= "<input class='lista_id' type='hidden' value='"+obj.id+"'>";
+                    domstring+= "<textarea rows='1' class='title title_editavel'>"+obj.nome+"</textarea>";
+                    domstring+= "<div class='cards_sortable'>";
+                    domstring+= "</div>";
+                    domstring+= "</div>";
+
+                //salva tudo na lista
+                lista.innerHTML = domstring;
+
+                // depois dos cards é preciso adicionar o button
+                var btn = document.createElement("button");
+                    btn.append("adicionar card");
+                    btn.className = "btn btn-primary btn-sm";
+                    btn.onclick = function () {
+                        TODO.cardToDOM(false, lista);
+                    };
+
+                $(lista).find(".listas_content").append(btn);
+
+                TODO.events();
+
+                if(!retornar){
+                    $(".listas_sortable").append(lista);
+                }
+                else{
+                    return lista;
+                }
+
+            }
+
+            /**
+             * transforma a array em lista unica
+             */
+            static cardsToCard(obj, dom){
+                for(var i = 0; i <= obj.cartoes.length -1; i++){
                     var atual = obj.cartoes[i];
 
-                    //primeiro cria o card
-                    var card = document.createElement("div");
-                    card.className = "card";
+                    var card = TODO.cardToDOM(atual);
 
-                    // monta o resto da DOM
-                    var domstring = "<h4 class='title'>"+atual.nome+"</h4>";
-                        domstring+= "<p>"+atual.descricao+"</p>";
-
-                    card.innerHTML = domstring;
                     $(dom).find(".cards_sortable").append(card);
+                }
+            }
+
+            /**
+             * transforma uma unica card em html
+             */
+            static cardToDOM(obj, lista = false){
+                if(!obj){
+                    obj = {
+                        nome: "nova card " + Math.floor((Math.random() * 10000) + 1),
+                        descricao: "edite esta card",
+                        id: ""
+                    };
+                }
+
+                //primeiro cria o card
+                var card = document.createElement("div");
+                    card.className = "card cartao";
+
+                // monta o resto da DOM
+                var domstring = "<h6 class='title cartao_titulo'>"+obj.nome+"</h6>";
+                    domstring+= "<p class='small cartao_descricao'>"+obj.descricao+"</p>";
+                    domstring+= "<input class='card_id' type='hidden' value='"+obj.id+"'>";
+
+                card.innerHTML = domstring;
+
+                TODO.events();
+
+                if(!lista){
+                    return card;
+                }
+                else{
+                    $(lista).find(".cards_sortable").append(card);
                 }
             }
 
@@ -209,22 +241,82 @@
                 })
             }
 
+
+            /**
+             * Transforma a DOM em JSON
+             */
+            static DOMtoJSON(){
+                // monta o quadro
+                var quadro = {
+                    nome: $("#quadro_title").text(),
+                    id: $("#quadro_id").val(),
+                    listas : []
+                };
+
+                var i = 0;
+                $(".listas_content").each(function(){
+
+                    // itera cada lista
+                    var lista = {
+                        posicao: i,
+                        id: $(this).find(".lista_id").val(),
+                        nome: $(this).find(".title.title_editavel").text(),
+                        cards: []
+                    };
+
+                    // itera as cards
+                    var c = 0;
+                    $(this).find('.cartao').each(function(){
+                        var card = {
+                            posicao: c,
+                            id: $(this).find(".card_id").val(),
+                            nome: $(this).find(".cartao_titulo").text(),
+                            descricao: $(this).find(".cartao_descricao").text(),
+                        };
+
+                        //ultima coisa a fazer
+                        lista.cards.push(card);
+
+                        // acrescenta no contador
+                        c++;
+                    });
+
+                    //ultima coisa a fazer
+                    quadro.listas.push(lista);
+
+                    // acrescenta no contador
+                    i++;
+                });
+
+                return quadro;
+
+            }
             /**
              *  Salva os dados
              */
-            setQuadro(){
-
+            static setQuadro(){
+                var dados = TODO.DOMtoJSON();
+                var elemento = this;
+                $.ajax({
+                    method: 'POST',
+                    data: dados,
+                    type: 'string',
+                    url: '{{ path(salva, {'id' : id}) }}'
+                }).done(function(data) {
+                    debugger;
+                    console.log(data);
+                })
             }
 
             /**
              *  Recarrega os eventos
              */
-            events(){
+            static events(){
                 $( ".listas_sortable" ).sortable({
-                    placeholder: "ui-state-highlight col-md-4"
+                    placeholder: "ui-state-highlight listas"
                 }).disableSelection();
                 $( ".cards_sortable" ).sortable({
-                    placeholder: "ui-state-highlight",
+                    placeholder: "card ui-state-highlight",
                     connectWith: ".cards_sortable"
                 }).disableSelection();
             }

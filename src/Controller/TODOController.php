@@ -29,7 +29,8 @@ class TODOController extends Controller
     public function edita($id, Request $request){
         return $this->render("admin/admin_TODO.html.twig",[
             'id' => $id,
-            'got' => 'TODO_get'
+            'got' => 'TODO_get',
+            'salva' => 'TODO_salva'
         ]);
     }
 
@@ -86,5 +87,75 @@ class TODOController extends Controller
         $jsonContent = $serializer->serialize($obj_quadros, 'json');
 
         return new Response($jsonContent);
+    }
+
+    /**
+     * @Route("/set/{id}", name="TODO_salva", defaults={"id": "null"}, methods={"POST"})
+     */
+    public function salva($id, Request $request){
+        $dados = $request->request->all();
+
+        // faz o fetch do quadro
+        $quadro = $this->getDoctrine()
+            ->getRepository(TODOQuadros::class)
+            ->find($id);
+
+        // senão existe ele cria um novo
+        if(empty($quadro)){
+            $quadro = new TODOQuadros();
+        }
+
+        // primeiro ajusta os dados do quadro
+        $quadro->setNome($dados["nome"]);
+
+        $em = $this->getDoctrine()->getManager();
+        $quadro = $em->merge($quadro);    // sempre manter o objeto atalizado
+
+        // actually executes the queries (i.e. the INSERT query)
+        $em->flush();
+
+        // itera as listas
+        foreach ($dados["listas"] as $l){
+            $lista = $this->getDoctrine()
+                ->getRepository(TODOListas::class)
+                ->find($l["id"]);
+
+            if(empty($lista)){
+                $lista = new TODOListas();
+            }
+
+            $lista->setNome($l["nome"]);
+            $lista->setQuadros($quadro);
+            $lista->setIsActive(true);
+
+            $em = $this->getDoctrine()->getManager();       // sempre manter o objeto atalizado
+            $lista = $em->merge($lista);    // atualiza o objeto original
+
+            // actually executes the queries (i.e. the INSERT query)
+            $em->flush();
+
+            // itera as cards
+            foreach ($l["cards"] as $c){
+                $card = $this->getDoctrine()
+                    ->getRepository(TODOCartoes::class)
+                    ->find($c["id"]);
+
+                if(empty($card)){
+                    $card = new TODOCartoes();
+                }
+
+                $card->setNome($c["nome"]);
+                $card->setListas($lista);
+                $card->setDescricao($c["descricao"]);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->merge($card);    // atualiza o objeto original
+
+                // actually executes the queries (i.e. the INSERT query)
+                $em->flush();
+            }
+        }
+        return new Response("sucesso");
+
     }
 }
