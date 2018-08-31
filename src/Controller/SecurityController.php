@@ -49,7 +49,6 @@ class SecurityController extends Controller
             // actually executes the queries (i.e. the INSERT query)
             $em->flush();
         }
-        dump($usuario);
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();

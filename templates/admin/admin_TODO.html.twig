@@ -21,8 +21,44 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <input type="hidden" data-toggle="modal" data-target="#modal_cards" id="trigger_cards"></input>
+    <div class="modal fade" id="modal_cards" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edição de card</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating required" for="modal_card_titulo">Titulo</label>
+                            <input type="text" id="modal_card_titulo" required="required" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group bmd-form-group">
+                            <label class="bmd-label-floating required" for="modal_card_descricao">Descrição</label>
+                            <textarea id="modal_card_descricao" required="required" rows="4" class="form-control">
+                            </textarea>
+                        </div>
+                    </div>
+                    <!--div class="form-group bmd-form-group is-filled">
+                        <label class="label-control bmd-label-static">Datetime Picker</label>
+                        <input type="text" class="form-control datetimepicker" value="07/02/2018">
+                        <span class="material-input"></span>
+                        <span class="material-input"></span>
+                    </div-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link">Salvar</button>
+                    <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <style>
         .listas_wrapper{
@@ -44,6 +80,7 @@
             min-width: 270px;
             display: inline-block;
             min-height: 100px;
+            cursor: pointer;
             margin-right: 15px;
         }
 
@@ -60,11 +97,18 @@
         }
 
         .listas_content textarea.title{
-            background: #dadada;
+            background: transparent;
+            border-radius: 5px;
+            transition: 500ms;
+            padding: 0 0 0 5px;
             border: none;
             width: 100%;
             font-size: 1.125rem;
             line-height: 1.4em;
+        }
+
+        textarea.title:hover, textarea.title:focus {
+            box-shadow: 0px 0px 5px #a8ade4;
         }
 
         .listas_content p{
@@ -73,11 +117,17 @@
 
         .cards_sortable{
             min-height: 78px;
+            max-height: 400px;
+            overflow-y: scroll;
         }
 
         .cards_sortable .card{
             padding: 10px;
             margin: 10px 0;
+        }
+
+        .cards_sortable .card:hover {
+            background: #f4f4f4;
         }
 
         .ui-state-highlight {
@@ -114,6 +164,7 @@
                 $("#quadro_title").text(this.arvore.nome);
                 $("#quadro_id").val(this.arvore.id);
                 this.listasToList();
+                TODO.events();      // para ter certeza que carregou
             }
 
             /**
@@ -152,7 +203,7 @@
 
                 var domstring = "<div class='listas_content'>";
                     domstring+= "<input class='lista_id' type='hidden' value='"+obj.id+"'>";
-                    domstring+= "<textarea rows='1' class='title title_editavel'>"+obj.nome+"</textarea>";
+                    domstring+= "<textarea rows='1' class='title title_editavel form-control'>"+obj.nome+"</textarea>";
                     domstring+= "<div class='cards_sortable'>";
                     domstring+= "</div>";
                     domstring+= "</div>";
@@ -209,7 +260,7 @@
                 //primeiro cria o card
                 var card = document.createElement("div");
                     card.className = "card cartao";
-
+                    $(card).attr("onclick", "TODO.abreModal(this)");
                 // monta o resto da DOM
                 var domstring = "<h6 class='title cartao_titulo'>"+obj.nome+"</h6>";
                     domstring+= "<p class='small cartao_descricao'>"+obj.descricao+"</p>";
@@ -260,7 +311,7 @@
                     var lista = {
                         posicao: i,
                         id: $(this).find(".lista_id").val(),
-                        nome: $(this).find(".title.title_editavel").text(),
+                        nome: $(this).find(".title.title_editavel").val(),
                         cards: []
                     };
 
@@ -291,6 +342,7 @@
                 return quadro;
 
             }
+
             /**
              *  Salva os dados
              */
@@ -303,9 +355,19 @@
                     type: 'string',
                     url: '{{ path(salva, {'id' : id}) }}'
                 }).done(function(data) {
-                    debugger;
                     console.log(data);
                 })
+            }
+
+            /**
+             * Atualiza modal com conteudo da card atual
+             */
+            static abreModal(card){
+                var modal = $("#modal_cards");
+                $(modal).find("#modal_card_titulo").val($(card).find(".cartao_titulo").text());
+                $(modal).find("#modal_card_descricao").text($(card).find(".cartao_descricao").text());
+
+                $("#trigger_cards").click();
             }
 
             /**

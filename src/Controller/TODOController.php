@@ -135,24 +135,26 @@ class TODOController extends Controller
             $em->flush();
 
             // itera as cards
-            foreach ($l["cards"] as $c){
-                $card = $this->getDoctrine()
-                    ->getRepository(TODOCartoes::class)
-                    ->find($c["id"]);
+            if(!empty($l["cards"])) {
+                foreach ($l["cards"] as $c) {
+                    $card = $this->getDoctrine()
+                        ->getRepository(TODOCartoes::class)
+                        ->find($c["id"]);
 
-                if(empty($card)){
-                    $card = new TODOCartoes();
+                    if (empty($card)) {
+                        $card = new TODOCartoes();
+                    }
+
+                    $card->setNome($c["nome"]);
+                    $card->setListas($lista);
+                    $card->setDescricao($c["descricao"]);
+
+                    $em = $this->getDoctrine()->getManager();
+                    $em->merge($card);    // atualiza o objeto original
+
+                    // actually executes the queries (i.e. the INSERT query)
+                    $em->flush();
                 }
-
-                $card->setNome($c["nome"]);
-                $card->setListas($lista);
-                $card->setDescricao($c["descricao"]);
-
-                $em = $this->getDoctrine()->getManager();
-                $em->merge($card);    // atualiza o objeto original
-
-                // actually executes the queries (i.e. the INSERT query)
-                $em->flush();
             }
         }
         return new Response("sucesso");
