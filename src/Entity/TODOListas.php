@@ -29,6 +29,11 @@ class TODOListas
     private $nome;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $posicao;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     private $is_active;
@@ -49,7 +54,8 @@ class TODOListas
             "Id" => (!empty($this->id)) ? $this->getId(): "",
             "Nome" => (!empty($this->nome)) ? $this->getNome(): "",
             "Quadros" => (!empty($this->quadros)) ? $this->getQuadros()->getNome(): "",
-            "E-mail" => (!empty($this->is_active)) ? $this->getisActive(): ""
+            "Ativo" => (!empty($this->is_active)) ? $this->getisActive(): "",       // precisamos passar isso?
+            "Posicao" => (!empty($this->nome)) ? $this->getPosicao(): "",
         ];
 
         // gera nomes
@@ -103,6 +109,23 @@ class TODOListas
     {
         $this->nome = $nome;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPosicao()
+    {
+        return $this->posicao;
+    }
+
+    /**
+     * @param mixed $posicao
+     */
+    public function setPosicao($posicao): void
+    {
+        $this->posicao = $posicao;
+    }
+
 
     /**
      * @return mixed

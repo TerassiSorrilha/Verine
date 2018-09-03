@@ -47,7 +47,7 @@ class TODOQuadrosController extends Controller
         return $this->render('admin/admin_cadastro_padrao.html.twig', [
             'itens' => $relatorio,
             'title' => 'Quadros',
-            'edit' => 'admin_todo_quadros_single',
+            'edit' => 'TODO_single',
         ]);
     }
 

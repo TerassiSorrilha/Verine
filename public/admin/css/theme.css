@@ -55,3 +55,15 @@
     color: #aaa;
     background: transparent;
 }
+
+.card .card-title{
+    margin-bottom: 9px;
+}
+.card .card-category{
+    line-height: 17px;
+}
+
+.card-header .nav .nav-item{
+    cursor: pointer;
+    margin: 4px 0 ;
+}

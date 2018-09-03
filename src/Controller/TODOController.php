@@ -45,7 +45,7 @@ class TODOController extends Controller
 
         $listas = $this->getDoctrine()
             ->getRepository(TODOListas::class)
-            ->findBy(["quadros" => $quadros->getId()]);
+            ->findBy(["quadros" => $quadros->getId()], ["posicao" => "ASC"]);
 
         $obj_listas = array();
 
@@ -55,20 +55,20 @@ class TODOController extends Controller
             $obj_cartoes = array();
             $cartoes = $this->getDoctrine()
                 ->getRepository(TODOCartoes::class)
-                ->findBy(["listas" => $row->getId()]);
+                ->findBy(["listas" => $row->getId()], ["posicao" => "ASC"]);
 
             $c = 0; // futuramente sera substituido pela position
             foreach($cartoes as $r){
                 $obj_cartoes[$c]["id"] = $r->getId();
                 $obj_cartoes[$c]["nome"] = $r->getNome();
-                //$obj_cartoes[$c]["isActive"] = $r->getisActive();
+                $obj_cartoes[$c]["active"] = $r->getisActive();
                 $obj_cartoes[$c]["descricao"] = $r->getDescricao();
                 $c++;
             }
 
             $obj_listas[$i]["id"] = $row->getId();
             $obj_listas[$i]["nome"] = $row->getNome();
-            $obj_listas[$i]["isActive"] = $row->getisActive();
+            $obj_listas[$i]["active"] = $row->getisActive();
             $obj_listas[$i]["cartoes"] = $obj_cartoes;
 
             $i++;
@@ -107,6 +107,7 @@ class TODOController extends Controller
 
         // primeiro ajusta os dados do quadro
         $quadro->setNome($dados["nome"]);
+        $quadro->setUsuario($this->getUser());
 
         $em = $this->getDoctrine()->getManager();
         $quadro = $em->merge($quadro);    // sempre manter o objeto atalizado
@@ -126,7 +127,8 @@ class TODOController extends Controller
 
             $lista->setNome($l["nome"]);
             $lista->setQuadros($quadro);
-            $lista->setIsActive(true);
+            $lista->setIsActive($l["active"]);
+            $lista->setPosicao($l["posicao"]);
 
             $em = $this->getDoctrine()->getManager();       // sempre manter o objeto atalizado
             $lista = $em->merge($lista);    // atualiza o objeto original
@@ -147,6 +149,8 @@ class TODOController extends Controller
 
                     $card->setNome($c["nome"]);
                     $card->setListas($lista);
+                    $card->setIsActive($c["active"]);
+                    $card->setPosicao($c["posicao"]);
                     $card->setDescricao($c["descricao"]);
 
                     $em = $this->getDoctrine()->getManager();

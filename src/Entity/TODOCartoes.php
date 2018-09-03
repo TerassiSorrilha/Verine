@@ -23,6 +23,11 @@ class TODOCartoes
     private $listas;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $posicao;
+
+    /**
      * @ORM\Column(type="string")
      */
     private $descricao;
@@ -32,13 +37,20 @@ class TODOCartoes
      */
     private $nome;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $is_active;
+
     //==================================================================================================================
     public function relatorio(){
         $array = [
             "Id" => (!empty($this->id)) ? $this->getId(): "",
             "Nome" => (!empty($this->nome)) ? $this->getNome(): "",
             "Listas" => (!empty($this->quadros)) ? $this->getListas()->getNome(): "",
-            "Descricao" => (!empty($this->descricao)) ? $this->getDescricao(): ""
+            "Descricao" => (!empty($this->descricao)) ? $this->getDescricao(): "",
+            "Ativo" => (!empty($this->is_active)) ? $this->getisActive(): "",
+            "Posicao" => (!empty($this->nome)) ? $this->getPosicao(): "",
         ];
 
         // gera nomes
@@ -80,6 +92,22 @@ class TODOCartoes
     /**
      * @return mixed
      */
+    public function getPosicao()
+    {
+        return $this->posicao;
+    }
+
+    /**
+     * @param mixed $posicao
+     */
+    public function setPosicao($posicao): void
+    {
+        $this->posicao = $posicao;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getDescricao()
     {
         return $this->descricao;
@@ -92,6 +120,23 @@ class TODOCartoes
     {
         $this->descricao = $descricao;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getisActive()
+    {
+        return $this->is_active;
+    }
+
+    /**
+     * @param mixed $is_active
+     */
+    public function setIsActive($is_active): void
+    {
+        $this->is_active = $is_active;
+    }
+
 
     /**
      * @return mixed

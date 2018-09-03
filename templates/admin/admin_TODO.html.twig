@@ -1,12 +1,40 @@
 {% extends 'admin/admin_base.html.twig' %}
 {% block content %}
     <div class="card">
-        <div class="card-header card-header-text card-header-primary">
-            <div class="card-text">
+
+        <div class="card-header row card-header-primary">
+            <div class="col-md-6">
                 <h4 id="quadro_title" class="card-title">TODO</h4>
-                <input type="hidden" value="" name="quadro_id" id="quadro_id">
-                <p class="card-category">Edite ou adicione novas Tarefas</p>
+                <p class="card-category">Edite ou adicione novas Listas</p>
             </div>
+
+            <div class="col-md-6">
+                <div class="nav-tabs-navigation pull-right">
+                    <div class="nav-tabs-wrapper">
+                        <ul class="nav nav-tabs" data-tabs="tabs">
+
+                            <li class="nav-item">
+                                <a class="nav-link" onclick="TODO.toggleActive()">
+                                    <i class="material-icons">toggle_on</i>Mostrar/ocultar desativados
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="#profile" data-toggle="modal" data-target="#modal_quadro">
+                                    <i class="material-icons">edit</i>Editar
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="btn btn-white btn-round btn-just-icon retornar" href="{{ path("admin_todo_quadros") }}">
+                                    <i class="material-icons">keyboard_arrow_left</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="card-body">
@@ -21,28 +49,41 @@
         </div>
     </div>
 
-    <input type="hidden" data-toggle="modal" data-target="#modal_cards" id="trigger_cards"></input>
+    <input type="hidden" data-toggle="modal" data-target="#modal_cards" id="trigger_cards">
     <div class="modal fade" id="modal_cards" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Edi��o de card</h4>
+                    <h4 class="modal-title">Edição de card</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         <i class="material-icons">clear</i>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-12">
-                        <div class="form-group bmd-form-group is-filled">
-                            <label class="bmd-label-floating required" for="modal_card_titulo">Titulo</label>
-                            <input type="text" id="modal_card_titulo" required="required" class="form-control">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group bmd-form-group is-filled">
+                                <label class="bmd-label-floating required" for="modal_card_titulo">Titulo</label>
+                                <input type="text" id="modal_card_titulo" required="required" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="togglebutton">
+                                <label>
+                                    <input id="modal_card_active" type="checkbox">
+                                    <span class="toggle"></span>
+                                    Ativo
+                                </label>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <div class="form-group bmd-form-group">
-                            <label class="bmd-label-floating required" for="modal_card_descricao">Descri��o</label>
-                            <textarea id="modal_card_descricao" required="required" rows="4" class="form-control">
-                            </textarea>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group bmd-form-group is-filled">
+                                <label class="bmd-label-floating required" for="modal_card_descricao">Descrição</label>
+                                <textarea id="modal_card_descricao" rows="4" class="form-control">
+                                </textarea>
+                            </div>
                         </div>
                     </div>
                     <!--div class="form-group bmd-form-group is-filled">
@@ -53,7 +94,31 @@
                     </div-->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-link">Salvar</button>
+                    <button type="button" id="salva_modal" class="btn btn-link">Salvar</button>
+                    <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal_quadro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edite o quadro</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating required" for="modal_card_titulo">Titulo</label>
+                            <input type="text" id="modal_quadro_titulo" required="required" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="salva_modal" onclick="TODO.editaQuadro()" class="btn btn-link">Salvar</button>
                     <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Cancelar</button>
                 </div>
             </div>
@@ -163,6 +228,7 @@
             quadrosDOM(){
                 $("#quadro_title").text(this.arvore.nome);
                 $("#quadro_id").val(this.arvore.id);
+                $("#modal_quadro_titulo").val(this.arvore.nome).change();
                 this.listasToList();
                 TODO.events();      // para ter certeza que carregou
             }
@@ -191,13 +257,18 @@
                 if(!obj){
                     obj = {
                         nome: "nova lista " + Math.floor((Math.random() * 10000) + 1),
-                        id: ""
+                        id: "",
+                        active: true
                     };
                     retornar = false;
                 }
                 // primeiro cria a lista
                 var lista = document.createElement("div");
                     lista.className = "listas";
+                    if(!obj.active){
+                        lista.className += " d-none";
+                    }
+
 
                 // monta o resto da DOM
 
@@ -211,7 +282,7 @@
                 //salva tudo na lista
                 lista.innerHTML = domstring;
 
-                // depois dos cards � preciso adicionar o button
+                // depois dos cards é preciso adicionar o button
                 var btn = document.createElement("button");
                     btn.append("adicionar card");
                     btn.className = "btn btn-primary btn-sm";
@@ -221,10 +292,25 @@
 
                 $(lista).find(".listas_content").append(btn);
 
+                // cria botão de desabilitação
+                btn = document.createElement("div");
+                btn.className = "togglebutton";
+                btn.onchange = function () {
+                    TODO.setQuadro();
+                };
+
+                domstring = "<label>";
+                domstring += "<input class='lista_active' checked='"+obj.active+"' type='checkbox'><span class='toggle'></span>Ativo";
+                domstring += "</label>";
+                btn.innerHTML = domstring;
+
+                $(lista).find(".listas_content").append(btn);
+
                 TODO.events();
 
                 if(!retornar){
                     $(".listas_sortable").append(lista);
+                    TODO.setQuadro();
                 }
                 else{
                     return lista;
@@ -253,18 +339,24 @@
                     obj = {
                         nome: "nova card " + Math.floor((Math.random() * 10000) + 1),
                         descricao: "edite esta card",
-                        id: ""
+                        id: "",
+                        active: true
                     };
                 }
 
                 //primeiro cria o card
                 var card = document.createElement("div");
                     card.className = "card cartao";
+                    if(!obj.active){
+                        card.className += " d-none";
+                    }
                     $(card).attr("onclick", "TODO.abreModal(this)");
+
                 // monta o resto da DOM
                 var domstring = "<h6 class='title cartao_titulo'>"+obj.nome+"</h6>";
                     domstring+= "<p class='small cartao_descricao'>"+obj.descricao+"</p>";
                     domstring+= "<input class='card_id' type='hidden' value='"+obj.id+"'>";
+                    domstring+= "<input class='card_active' type='hidden' value='"+obj.active+"'>";
 
                 card.innerHTML = domstring;
 
@@ -275,6 +367,7 @@
                 }
                 else{
                     $(lista).find(".cards_sortable").append(card);
+                    TODO.setQuadro();
                 }
             }
 
@@ -282,6 +375,11 @@
              *  Recupera os dados
              */
             getQuadro(){
+                var id = {{ id }};
+                if( id == "0"){
+                    return;
+                }
+
                 var elemento = this;
                 $.ajax({
                     method: 'GET',
@@ -312,6 +410,7 @@
                         posicao: i,
                         id: $(this).find(".lista_id").val(),
                         nome: $(this).find(".title.title_editavel").val(),
+                        active: $(this).find(".lista_active").is(":checked"),
                         cards: []
                     };
 
@@ -323,6 +422,7 @@
                             id: $(this).find(".card_id").val(),
                             nome: $(this).find(".cartao_titulo").text(),
                             descricao: $(this).find(".cartao_descricao").text(),
+                            active: $(this).find(".card_active").val()
                         };
 
                         //ultima coisa a fazer
@@ -355,8 +455,26 @@
                     type: 'string',
                     url: '{{ path(salva, {'id' : id}) }}'
                 }).done(function(data) {
+                    var promisse = "sucesso";
+
+                    if(data != promisse)
+                    {
+                        $.notify({
+                            icon: "notifications",
+                            message: "Erro ao tentar salvar a alteração"
+
+                        }, {
+                            type: 'danger',
+                            timer: 3000,
+                            placement: {
+                                from: 'top',
+                                align: 'center'
+                            }
+                        });
+                    }
+
                     console.log(data);
-                })
+                });
             }
 
             /**
@@ -364,10 +482,46 @@
              */
             static abreModal(card){
                 var modal = $("#modal_cards");
-                $(modal).find("#modal_card_titulo").val($(card).find(".cartao_titulo").text());
-                $(modal).find("#modal_card_descricao").text($(card).find(".cartao_descricao").text());
+                $(modal).find("#modal_card_titulo").val($(card).find(".cartao_titulo").text()).change();
+                $(modal).find("#modal_card_descricao").val($(card).find(".cartao_descricao").text());
+
+                // depois dos cards é preciso adicionar o button
+                var btn = document.getElementById("salva_modal");
+                    btn.onclick = function () {
+                        TODO.salvaModal(card);
+                    };
 
                 $("#trigger_cards").click();
+            }
+
+            /**
+             * Salva as alterações do modal na card
+             */
+            static salvaModal(card){
+                // basicamente inverte a função abremodal
+                var modal = $("#modal_cards");
+                $(card).find(".cartao_titulo").text($(modal).find("#modal_card_titulo").val());
+                $(card).find(".cartao_descricao").text($(modal).find("#modal_card_descricao").val());
+                $(card).find(".card_active").val($(modal).find("#modal_card_active").is(":checked"));
+                modal.modal("toggle");
+                TODO.setQuadro();
+            }
+
+            /**
+             * Salva as informações do modal de edição do quadro
+             */
+            static editaQuadro(){
+                $("#quadro_title").text($("#modal_quadro_titulo").val());
+                $("#modal_quadro").modal("toggle");
+                TODO.setQuadro();
+            }
+
+            /**
+             * mostra / oculta os ativos
+             */
+            static toggleActive(){
+                $(".d-block").removeClass("d-block");
+                $(".d-none").addClass("d-block");
             }
 
             /**
@@ -375,11 +529,17 @@
              */
             static events(){
                 $( ".listas_sortable" ).sortable({
-                    placeholder: "ui-state-highlight listas"
+                    placeholder: "ui-state-highlight listas",
+                    stop: function( ) {
+                        TODO.setQuadro();
+                    }
                 }).disableSelection();
                 $( ".cards_sortable" ).sortable({
                     placeholder: "card ui-state-highlight",
-                    connectWith: ".cards_sortable"
+                    connectWith: ".cards_sortable",
+                    stop: function( ) {
+                        TODO.setQuadro();
+                    }
                 }).disableSelection();
             }
         }
