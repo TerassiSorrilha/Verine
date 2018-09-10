@@ -1,0 +1,61 @@
+{% extends 'admin/admin_base.html.twig' %}
+{% block content %}
+    {% if form is defined %}
+        {% form_theme form 'blocks/form.html.twig' %}
+        <div class="card">
+            <div class="card-header card-header-primary" data-background-color="purple">
+                <h4 class="card-title">Pesquisar</h4>
+            </div>
+            <div class="card-body">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    {% endif %}
+    <div class="card">
+        <div class="card-header row card-header-primary">
+            <div class="col-md-6">
+                <h4 class="card-title">{{ title|capitalize }}</h4>
+                <p class="card-category">Edite ou adicione novos {{ title|lower }}</p>
+            </div>
+
+            <div class="col-md-6">
+                <div class="nav-tabs-navigation pull-right">
+                    <div class="nav-tabs-wrapper">
+                        <ul class="nav nav-tabs" data-tabs="tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#profile" data-toggle="tab">
+                                    <i class="material-icons">bug_report</i>Bugs
+                                    <div class="ripple-container"></div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#messages" data-toggle="tab">
+                                    <i class="material-icons">code</i>Website
+                                    <div class="ripple-container"></div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#settings" data-toggle="tab">
+                                    <i class="material-icons">cloud</i>Server
+                                    <div class="ripple-container"></div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn btn-white btn-round btn-just-icon retornar" href="{{ path( edit ,{id: 0}) }}">
+                                    <i class="material-icons">add</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            {% set tabela = [] %}
+            {% set tabela = tabela|merge({"conteudo" : itens, "path" : edit}) %}
+            {% include 'blocks/tabela.html.twig' %}
+        </div>
+    </div>
+{% endblock %}

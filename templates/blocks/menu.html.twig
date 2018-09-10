@@ -1,0 +1,49 @@
+{% set menu =
+    [
+        {
+            'title' : 'Usuários',
+            'path'  : 'admin_usuarios',
+            'icon'  : 'person'
+        },
+        {
+            'title' : 'Nível',
+            'path'  : 'admin_niveis',
+            'icon'  : 'person'
+        },
+        {
+            'title' : 'Quadros',
+            'path'  : 'admin_todo_quadros',
+            'icon'  : 'person'
+        },
+        {
+            'title' : 'Posts',
+            'path'  : 'admin_index',
+            'icon'  : 'person'
+        }
+    ]
+%}
+
+<div class="sidebar" data-background-color="black" data-color="purple" data-image="{{ asset('admin/img/sidebar-1.jpg') }}">
+    <!--
+Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
+
+Tip 2: you can also add an image using data-image tag
+-->
+    <div class="logo">
+        <a href="{{ path('admin_index') }}" class="simple-text">
+            Home
+        </a>
+    </div>
+    <div class="sidebar-wrapper">
+        <ul class="nav">
+            {% for item in menu %}
+                <li class="nav-item {{ app.request.attributes.get('_route') == item.path ? 'active' }}">
+                    <a class="nav-link" href="{{ path(item.path) }}">
+                        <i class="material-icons">{{ item.icon }}</i>
+                        <p>{{ item.title }}</p>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

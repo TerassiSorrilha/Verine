@@ -1,0 +1,11 @@
+{% if not itens.tags.empty %}
+    <p class="tags">
+        <span>Tagged in :</span>
+        {% for tag in itens.tags %}
+            <a class="label label-default">
+                <i class="fa fa-tag"></i> {{ tag.name }}
+            </a>
+        {% endfor %}
+    </p>
+{% endif %}
+

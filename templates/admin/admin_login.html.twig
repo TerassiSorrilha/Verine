@@ -1,0 +1,39 @@
+{% extends 'admin/admin_base.html.twig' %}
+{% block body %}
+    <body class="login-page">
+        <div class="wrapper wrapper-full-page">
+            <div class="page-header login-page header-filter" style="background-image: url({{ asset('admin/img/login.jpg') }}); background-size: cover; background-position: top center;">
+                <div class="container">
+                    <div class="col-md-4 col-sm-6 ml-auto mr-auto">
+                        <form action="{{ path('admin_login') }}" method="post">
+                            <div class="card card-login">
+                                <div class="card-header card-header-rose text-center">
+                                    <h4 class="card-title">Log in</h4>
+                                    <div class="msg">Faça login para começar sua sessão</div>
+                                </div>
+                                <div class="card-body ">
+                                    {% if error %}
+                                        <p class="card-description text-center">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+                                    {% endif %}
+
+                                    <div class="form-group bmd-form-group">
+                                        <label class="bmd-label-floating">Username</label>
+                                        <input type="text" class="form-control" name="_username" value="{{ last_username }}" required autofocus>
+                                    </div>
+
+                                    <div class="form-group bmd-form-group">
+                                        <label class="bmd-label-floating">Password</label>
+                                        <input type="password" class="form-control" name="_password" required>
+                                    </div>
+                                </div>
+                                <div class="card-footer justify-content-center">
+                                    <button onclick="$('form').submit()" class="btn btn-rose btn-link btn-lg">Lets Go</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+{% endblock %}

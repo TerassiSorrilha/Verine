@@ -1,0 +1,25 @@
+<div class="card-content table-responsive">
+    <table class="table">
+        <thead class="text-primary">
+        {% for key in tabela.conteudo.header %}
+            <th>{{ key|capitalize }}</th>
+        {% endfor %}
+        </thead>
+        <tbody>
+        {% if tabela.conteudo.itens is empty %}
+            <tr><td>Sem dados</td></tr>
+        {% endif %}
+        {% for row in tabela.conteudo.itens %}
+            {% if tabela.path is defined %}
+                <tr class="editavel click" onclick="window.location.href = '{{ path(tabela.path, {'id' : row.Id}) }}'">
+            {% else %}
+               <tr>
+            {% endif %}
+                {% for td in row %}
+                    <td>{{ td }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

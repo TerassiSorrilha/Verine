@@ -1,0 +1,69 @@
+.form-control[readonly], fieldset[readonly] .form-control{
+    cursor: not-allowed;
+}
+
+.main-panel{
+    overflow-y: scroll !important;
+}
+
+.editavel.click:hover {
+    cursor: pointer;
+    background: #eee;
+    border-radius: 3px;
+    transition: all 100ms linear;
+}
+
+.nav-tabs.navbar-right{
+    background-color: transparent ;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+}
+
+.nav-tabs .retornar i{
+    color: #999 !important;
+    margin: 0;
+}
+.nav-tabs .retornar:hover{
+    box-shadow: 0 14px 26px -12px rgba(50, 50, 50, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(50, 50, 50, 0.2);
+}
+
+.nav-tabs-wrapper {
+    position: relative;
+}
+
+.no-margin {
+    margin: 0;
+}
+
+.btn-group.bootstrap-select{
+    margin: 0;
+}
+
+.form-group.bmd-form-group{
+    margin-top: 20px;
+}
+
+.form-group.bmd-form-group .label-select{
+    top: -19px;;
+}
+
+.btn-group.bootstrap-select .dropdown-toggle{
+    padding-top: 9px;
+    padding-bottom: 9px;
+    color: #aaa;
+    background: transparent;
+}
+
+.card .card-title{
+    margin-bottom: 9px;
+}
+.card .card-category{
+    line-height: 17px;
+}
+
+.card-header .nav .nav-item{
+    cursor: pointer;
+    margin: 4px 0 ;
+}
