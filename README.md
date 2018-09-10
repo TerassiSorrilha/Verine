@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-# Contributing
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
-=======
 # Verine
 A simple system with Symfony 4!
 
@@ -42,5 +37,3 @@ administração: localhost:8000/admin/post/
 
 Usuario: admin
 Senha: admin
-
->>>>>>> 3fc0c3bfaa496cac7374467e1f03a0efd2056565
