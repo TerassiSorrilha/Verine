@@ -27,6 +27,12 @@ class TODOController extends Controller
      * @Route("/{id}", name="TODO_single", defaults={"id": "null"})
      */
     public function edita($id, Request $request){
+
+        // se for novo precisa redirecionar para a rota de cadastro
+        if(empty($id) || $id == 0){
+            return $this->redirectToRoute("admin_todo_quadros_single", ['id' => $id]);
+        }
+
         return $this->render("admin/admin_TODO.html.twig",[
             'id' => $id,
             'got' => 'TODO_get',
