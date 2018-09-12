@@ -12,6 +12,7 @@
 namespace App\Repository;
 
 use App\Entity\Post;
+use App\Utils\Tools;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
@@ -41,7 +42,7 @@ class PostRepository extends ServiceEntityRepository
                 WHERE p.publishedAt <= :now
                 ORDER BY p.publishedAt DESC
             ')
-            ->setParameter('now', new \DateTime())
+            ->setParameter('now', Tools::getNow())
         ;
 
         return $this->createPaginator($query, $page);
