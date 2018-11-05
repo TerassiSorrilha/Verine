@@ -76,8 +76,6 @@ class Filtros extends Controller
         $relatorios = new Relatorios();
         $relatorios->setObj($obj);
         $this->dados = $relatorios->getData();
-
-        dump($this->dados);
     }
 
     public function getDados()

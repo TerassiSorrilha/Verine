@@ -1,14 +1,18 @@
 {% set menu =
     [
         {
-            'title' : 'Usuários',
-            'path'  : 'admin_usuarios',
-            'icon'  : 'person'
-        },
-        {
-            'title' : 'Nível',
-            'path'  : 'admin_niveis',
-            'icon'  : 'person'
+            'title' : 'Acessos',
+            'icon'  : 'person',
+            'sub'   : [{
+                'title' : 'Usuários',
+                'path'  : 'admin_usuarios',
+                'icon'  : 'person',
+            },
+            {
+                'title' : 'Nível',
+                'path'  : 'admin_niveis',
+                'icon'  : 'person',
+            }]
         },
         {
             'title' : 'Quadros',
@@ -21,19 +25,28 @@
             'icon'  : 'person'
         },
         {
-            'title' : 'Ligas',
-            'path'  : 'admin_ligas',
-            'icon'  : 'person'
-        },
-        {
-            'title' : 'Clubes',
-            'path'  : 'admin_clubes',
-            'icon'  : 'person'
-        },
-        {
-            'title' : 'Jogadores',
-            'path'  : 'admin_jogadores',
-            'icon'  : 'person'
+            'title' : 'FIFA',
+            'icon'  : 'person',
+            'sub'   : [{
+                'title' : 'Ligas',
+                'path'  : 'admin_ligas',
+                'icon'  : 'person'
+            },
+            {
+                'title' : 'Clubes',
+                'path'  : 'admin_clubes',
+                'icon'  : 'person'
+            },
+            {
+                'title' : 'Jogadores',
+                'path'  : 'admin_jogadores',
+                'icon'  : 'person'
+            },
+            {
+                'title' : 'Market',
+                'path'  : 'admin_market',
+                'icon'  : 'person'
+            }]
         }
     ]
 %}
@@ -52,11 +65,30 @@ Tip 2: you can also add an image using data-image tag
     <div class="sidebar-wrapper">
         <ul class="nav">
             {% for item in menu %}
-                <li class="nav-item {{ app.request.attributes.get('_route') == item.path ? 'active' }}">
-                    <a class="nav-link" href="{{ path(item.path) }}">
-                        <i class="material-icons">{{ item.icon }}</i>
-                        <p>{{ item.title }}</p>
-                    </a>
+                <li class="nav-item">
+                    {% if item.sub is defined %}
+                        <a class="nav-link" data-toggle="collapse" href="#{{ item.title }}">
+                            <i class="material-icons">{{ item.icon }}</i>
+                            <p> {{ item.title }} <b class="caret"></b></p>
+                        </a>
+                        <div class="collapse" id="{{ item.title }}">
+                            <ul class="nav">
+                                {% for subm in item.sub %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ path(subm.path) }}">
+                                            <span class="sidebar-mini"> {{ subm.title[:1] }} </span>
+                                            <span class="sidebar-normal"> {{ subm.title }} </span>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a class="nav-link" href="{{ path(item.path) }}">
+                            <i class="material-icons">{{ item.icon }}</i>
+                            <p>{{ item.title }}</p>
+                        </a>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>

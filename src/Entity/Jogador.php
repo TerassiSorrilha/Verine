@@ -21,10 +21,15 @@ class Jogador extends Pessoa
      */
     private $posicao;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Market", mappedBy="jogador")
+     */
+    private $market;
+
     //==================================================================================================================
     public function __construct()
     {
-        $this->usuarios = new ArrayCollection();    // precisa ser arraycollection
+        $this->market = new ArrayCollection();    // precisa ser arraycollection
     }
 
     public function relatorio(){
