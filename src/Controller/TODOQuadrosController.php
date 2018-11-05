@@ -12,6 +12,7 @@ namespace App\Controller;
 use App\Controller\Forms\TODOQuadrosForms;
 use App\Entity\TODOQuadros;
 use App\Services\Relatorios;
+use App\Services\Undo;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,14 +56,18 @@ class TODOQuadrosController extends Controller
      * @Route("admin/quadros/{id}", name="admin_todo_quadros_single", defaults={"id": "null"})
      */
     public function edit(Request $request, $id){
+        dump($_SESSION);
         // 1) build the form
-        $quadro = $this->getDoctrine()
-            ->getRepository(TODOQuadros::class)
-            ->find($id);
+        $em = $this->getDoctrine()->getManager();
+
+        $quadro = $em->getRepository(TODOQuadros::class)->find($id);
 
         if(empty($quadro)){
             $quadro = new TODOQuadros();
         }
+
+        // clone para manter as propriedades intactas
+        $old = clone $quadro;
 
         $form = $this->createForm(TODOQuadrosForms::class, $quadro);
 
@@ -71,14 +76,8 @@ class TODOQuadrosController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // 4) save the User!
-            $em = $this->getDoctrine()->getManager();
-
-            // tell Doctrine you want to (eventually) save the Product (no queries yet)
-            $quadro = $em->merge($quadro);    // atualiza o objeto original
-
-            // actually executes the queries (i.e. the INSERT query)
-            $em->flush();
+            $undo = new Undo($this, $em);
+            $quadro = $undo->merge($quadro, $old);
 
             return $this->redirectToRoute('admin_todo_quadros_single', ['id' => $quadro->getId()]);
         }
