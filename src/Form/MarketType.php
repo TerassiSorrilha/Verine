@@ -43,11 +43,14 @@ class MarketType extends AbstractType{
             ->add('preco_venda', TextType::class, [
                 'label' => 'Preço venda',
                 'attr' => [
+                    'data-mask' => '000.000.000.000.000,00',
+                    'data-mask-reverse' => 'true',
                     'pai' => 'col-md-3',
                 ]
             ])
             ->add('data', DateTimePickerType::class, [
                 'format' => 'dd-MM-yyyy HH:mm',
+                //'data' => Tools::DateUser(),
                 'attr' => [
                     'pai' => 'col-md-3',
                 ]

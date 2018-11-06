@@ -2,8 +2,7 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Utils\Tools;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,24 +47,12 @@ class Market
         $this->preco_compra = $this->preco_venda * 0.95;
     }
 
-    public function relatorio(){
-        $array = [
-            "Id" => (!empty($this->id)) ? $this->getId(): "",
-            "Jogador" => (!empty($this->jogador)) ? $this->getJogador()->getName(): "",
-            "Preço Venda" => (!empty($this->preco_venda)) ? number_format($this->getPrecoVenda(), 2, '.', ','): "",
-            "Preço Compra" => number_format($this->getPrecoCompra(), 2, '.', ','),
-        ];
-
-        // gera nomes
-        return $array;
-    }
-
     /**
      * @return float
      */
-    public function getPrecoCompra(): float
+    public function getPrecoCompra()
     {
-        return $this->preco_venda * 0.95;
+        return Tools::moneyUser(($this->preco_venda * 0.95));
     }
 
 
@@ -107,7 +94,7 @@ class Market
      */
     public function getPrecoVenda()
     {
-        return $this->preco_venda;
+        return Tools::moneyUser($this->preco_venda);
     }
 
     /**
@@ -115,7 +102,8 @@ class Market
      */
     public function setPrecoVenda($preco_venda): void
     {
-        $this->preco_venda = $preco_venda;
+        // preciso formatar para o valor correto
+        $this->preco_venda = Tools::MoneyDb($preco_venda);
     }
 
     /**

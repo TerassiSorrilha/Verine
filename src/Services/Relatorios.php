@@ -15,13 +15,11 @@ class Relatorios
     private $data = array();
     private $header;
 
-    private function getRelatorio(){
+    private function getRelatorio($retorno = null){
         $arr = array();
-
         foreach ($this->obj as $obj){
             $arr[] = $obj->relatorio();
         }
-
         return $arr;
     }
 
@@ -36,11 +34,16 @@ class Relatorios
     /**
      * @return mixed
      */
-    public function getData()
+    public function getData($rel = false)
     {
-        $relatorio = $this->getRelatorio();
+        if(!empty($rel)){
+            $relatorio = $rel;
+        }
+        else {
+            $relatorio = $this->getRelatorio();
+        }
 
-        $this->header = $this->getHeader();
+        $this->header = $this->getHeader($relatorio[0]);
         $this->data["itens"] = (empty($relatorio[0]["Id"]) ? false : $relatorio);
         $this->data["header"] = $this->header;
         return $this->data;
@@ -49,10 +52,10 @@ class Relatorios
     /**
      * @return mixed
      */
-    public function getHeader()
+    public function getHeader($relatorio)
     {
         $arr = array();
-        foreach($this->obj[0]->relatorio() as $k => $v){
+        foreach($relatorio as $k => $v){
             $arr[] = $k;
         }
         return $arr;

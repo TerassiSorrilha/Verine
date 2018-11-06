@@ -56,26 +56,33 @@ class Filtros extends Controller
 
     public function trataObjetos()
     {
-        if(!empty($this->data)){
-            //recupera tabela de usuarios
-            $obj = $this->obj->getDoctrine()
-                ->getRepository($this->entity)
-                ->findBy($this->data);
+        $args = array();
+        // cria o objeto comum
+        $obj_relatorio = $this->obj->getDoctrine()->getRepository($this->entity);
+
+        // nova montagem de relatorios
+        if(method_exists($obj_relatorio, 'customFind')){
+            $obj = $obj_relatorio->customFind($this->data);
+            $args = $obj_relatorio->relatorio();
+        }
+
+        // pesquisa que mantem a compatibilidade
+        elseif(!empty($this->data)){
+            $obj = $obj_relatorio->findBy($this->data);
         }
         else{
-            //recupera tabela de usuarios
-            $obj = $this->obj->getDoctrine()
-                ->getRepository($this->entity)
-                ->findAll();
+            $obj = $obj_relatorio->findAll();
         }
+
         if(empty($obj)) {
             // quick fix para montar a arvore de objetos
             $obj[0] = new $this->entity;
         }
+
         // instancia e gera relatorio
         $relatorios = new Relatorios();
         $relatorios->setObj($obj);
-        $this->dados = $relatorios->getData();
+        $this->dados = $relatorios->getData($args);
     }
 
     public function getDados()

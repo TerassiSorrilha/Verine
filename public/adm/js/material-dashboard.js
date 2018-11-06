@@ -249,7 +249,7 @@ md = {
                 clear: 'fa fa-trash',
                 close: 'fa fa-remove'
             }
-         });
+         }).closest("div").addClass("is-filled");
 
          $('.datepicker').datetimepicker({
             format: 'MM/DD/YYYY',
@@ -264,7 +264,7 @@ md = {
                 clear: 'fa fa-trash',
                 close: 'fa fa-remove'
             }
-         });
+         }).closest("div").addClass("is-filled");
 
          $('.timepicker').datetimepicker({
 //          format: 'H:mm',    // use this format if you want the 24hours timepicker
@@ -281,7 +281,7 @@ md = {
                 close: 'fa fa-remove'
 
             }
-         });
+         }).closest("div").addClass("is-filled");
     },
 
 
