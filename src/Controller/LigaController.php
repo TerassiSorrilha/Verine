@@ -63,7 +63,7 @@ class LigaController extends Controller
             // actually executes the queries (i.e. the INSERT query)
             $em->flush();
 
-            return $this->redirectToRoute('admin_ligas_single', ['id' => $liga->getId()]);
+            return $this->redirectToRoute('admin_ligas');
         }
 
         return $this->render('admin/admin_edit_padrao.html.twig',[

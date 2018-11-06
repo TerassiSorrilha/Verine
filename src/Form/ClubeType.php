@@ -32,11 +32,6 @@ class ClubeType extends AbstractType
                     'pai' => 'col-md-2'
                 ]
             ])
-            ->add('name', TextType::class, [
-                'attr' => [
-                    'pai' => 'col-md-4'
-                ]
-            ])
             ->add('liga', EntityType::class,[
                 'class' => Liga::class,
                 'choice_label' => 'name',
@@ -45,6 +40,11 @@ class ClubeType extends AbstractType
                 ],
                 'attr' => [
                     'pai' => 'col-md-3',
+                ]
+            ])
+            ->add('name', TextType::class, [
+                'attr' => [
+                    'pai' => 'col-md-4'
                 ]
             ])
             ->add('send', SubmitType::class, [

@@ -62,7 +62,7 @@ class ClubeController extends Controller
             // actually executes the queries (i.e. the INSERT query)
             $em->flush();
 
-            return $this->redirectToRoute('admin_clubes_single', ['id' => $clube->getId()]);
+            return $this->redirectToRoute('admin_clubes');
         }
 
         return $this->render('admin/admin_edit_padrao.html.twig',[

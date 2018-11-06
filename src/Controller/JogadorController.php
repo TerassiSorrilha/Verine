@@ -62,7 +62,7 @@ class JogadorController extends Controller
             // actually executes the queries (i.e. the INSERT query)
             $em->flush();
 
-            return $this->redirectToRoute('admin_jogadores_single', ['id' => $jogador->getId()]);
+            return $this->redirectToRoute('admin_jogadores');
         }
 
         return $this->render('admin/admin_edit_padrao.html.twig',[
