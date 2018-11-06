@@ -42,7 +42,7 @@ class PostRepository extends ServiceEntityRepository
                 WHERE p.publishedAt <= :now
                 ORDER BY p.publishedAt DESC
             ')
-            ->setParameter('now', Tools::getNow())
+            ->setParameter('now', Tools::DateDB())
         ;
 
         return $this->createPaginator($query, $page);

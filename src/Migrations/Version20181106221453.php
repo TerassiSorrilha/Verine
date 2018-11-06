@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20181106140559 extends AbstractMigration
+class Version20181106221453 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
@@ -23,7 +23,7 @@ class Version20181106140559 extends AbstractMigration
         $this->addSql('CREATE TABLE pessoa (id INT IDENTITY NOT NULL, jogadores_id INT, name NVARCHAR(255) NOT NULL, discr NVARCHAR(255) NOT NULL, posicao NVARCHAR(255), PRIMARY KEY (id))');
         $this->addSql('CREATE INDEX IDX_1CDFAB82DC527FFC ON pessoa (jogadores_id)');
         $this->addSql('CREATE TABLE liga (id INT IDENTITY NOT NULL, name NVARCHAR(255) NOT NULL, PRIMARY KEY (id))');
-        $this->addSql('CREATE TABLE market (id INT IDENTITY NOT NULL, jogador_id INT, preco_venda NUMERIC(10, 0) NOT NULL, data DATETIME2(6) NOT NULL, is_active BIT NOT NULL, PRIMARY KEY (id))');
+        $this->addSql('CREATE TABLE market (id INT IDENTITY NOT NULL, jogador_id INT, preco_venda DOUBLE PRECISION NOT NULL, data DATETIME2(6) NOT NULL, is_active BIT NOT NULL, PRIMARY KEY (id))');
         $this->addSql('CREATE INDEX IDX_6BAC85CB814B85AC ON market (jogador_id)');
         $this->addSql('CREATE TABLE niveis (id INT IDENTITY NOT NULL, name NVARCHAR(255) NOT NULL, PRIMARY KEY (id))');
         $this->addSql('CREATE TABLE symfony_demo_post (id INT IDENTITY NOT NULL, author_id INT NOT NULL, title NVARCHAR(255) NOT NULL, subtitle NVARCHAR(255) NOT NULL, slug NVARCHAR(255) NOT NULL, summary NVARCHAR(255) NOT NULL, content VARCHAR(MAX) NOT NULL, is_active BIT NOT NULL, published_at DATETIME2(6) NOT NULL, expired_at DATETIME2(6) NOT NULL, insert_at DATETIME2(6) NOT NULL, PRIMARY KEY (id))');
